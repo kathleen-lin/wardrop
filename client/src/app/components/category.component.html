@@ -1,0 +1,19 @@
+<h3> {{ categoryName | titlecase }} </h3>
+
+<!-- to have a list of items in that category 
+example query - select * from items where category = top (categoryName)
+-->
+
+<div *ngFor="let i of items">
+    <div [routerLink]="['/item', i.itemId]">
+        <img src = "{{ i.photoUrl }}" width = 200px >
+        <h3> {{ i.description }}</h3>
+        <i>worn {{ i.timeWorn }} time(s)</i>
+        <br>
+    
+    </div>
+    <button (click)="increaseWorn(i)">I wore this today</button>
+        <p>---------</p>
+</div>
+
+

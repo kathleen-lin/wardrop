@@ -1,0 +1,13 @@
+<!-- <p>{{ selectedItem.itemId }}</p>
+<p>{{ selectedItem.description }}</p>
+<p>{{ selectedItem.datePurchased }}</p>
+<p>{{ selectedItem.timeWorn }}</p> -->
+
+<div *ngIf="selectedItem">
+    <img src = "{{ selectedItem.photoUrl }}" width = 200px>
+    <p>{{ selectedItem.description }}</p>
+    <p>{{ selectedItem.datePurchased }}</p>
+    <p>{{ selectedItem.timeWorn }}</p> 
+    <p>{{ selectedItem.costPerWear }}</p> 
+    <button (click)="increaseWorn()"> I wear this today!</button>
+  </div>

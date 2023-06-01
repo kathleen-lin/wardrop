@@ -1,0 +1,29 @@
+<form enctype="multipart/form-data" [formGroup]="addForm" (ngSubmit)="processForm()" method="post">
+    <label>Photo: </label>
+    <input type="file" accept="image/png, image/jpeg" formControlName="photo" #photo>
+<br>
+    <label >Description: </label>
+    <input type="text" formControlName="description">
+<br>
+    <label >Price: </label>
+    <input type='number' step='0.01' placeholder='0.00' min="0.00" formControlName="price" />
+<br>
+    <label >Date purchased: </label>
+    <input type='date' formControlName="purchaseOn"/>
+<br>
+    <label>Time worn: </label>
+    <input type="number" min="0" formControlName="timeWorn">
+<br>
+    <label> Category</label>
+    <select name="" id="" formControlName="category">
+        <option value="top">Top</option>
+        <option value="bottom">Bottom</option>
+        <option value="one-piece">One-piece</option>
+        <option value="outerwear">Outerwear</option>
+        <option value="shoes">Shoes</option>
+        <option value="accessories">Accessories</option>
+
+    </select>
+<br>
+    <button type="submit">Save</button>
+</form>
