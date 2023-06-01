@@ -16,6 +16,8 @@ export class CategoryComponent implements OnInit {
 
   items!: Item[]
 
+  user!: string
+
   constructor(private httpClient: HttpClient, private activatedRoute: ActivatedRoute, private itmSvc: ItemService) {}
 
   ngOnInit(): void {
@@ -30,8 +32,11 @@ export class CategoryComponent implements OnInit {
         console.log(">>>" + this.categoryName);        
       }
     );
-    // query for list of items with category, fetch from: http://localhost:8080/api?category=top
-    this.itmSvc.getItemListByCategory(this.categoryName)
+    // @ts-ignore
+    this.user = localStorage.getItem("user")
+    console.log("user: " + this.user);
+    // query for list of items with category, fetch from: http://localhost:8080/api?category=top?user=celine
+    this.itmSvc.getItemListByCategory(this.categoryName, this.user)
       .then((r) => {
         this.items = r
         console.log(this.items)

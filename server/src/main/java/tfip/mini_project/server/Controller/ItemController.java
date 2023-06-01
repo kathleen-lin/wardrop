@@ -59,11 +59,11 @@ public class ItemController {
 
     @CrossOrigin(origins = "*")
     @GetMapping
-    public ResponseEntity<String> getItemsByCategory(@RequestParam("category") String category){
+    public ResponseEntity<String> getItemsByCategory(@RequestParam("category") String category, @RequestParam("user") String userName){
 
 
         try {
-            Optional<List<Item>> optListItms = itemRepo.getItemListByCategory(category);
+            Optional<List<Item>> optListItms = itemRepo.getItemListByCategory(category, userName);
 
             if (optListItms.isEmpty()){
             
@@ -88,7 +88,7 @@ public class ItemController {
     }
 
     @PostMapping(path="/upload", consumes= MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> postItem(@RequestPart MultipartFile photo, @RequestPart String description, @RequestPart String price,  @RequestPart String purchaseOn, @RequestPart String timeWorn, @RequestPart String category) {
+    public ResponseEntity<String> postItem(@RequestPart MultipartFile photo, @RequestPart String description, @RequestPart String price, @RequestPart String purchaseOn, @RequestPart String timeWorn, @RequestPart String category, @RequestPart String userName) {
 
         System.out.println(photo.getOriginalFilename());
         System.out.println(description);
@@ -112,7 +112,7 @@ public class ItemController {
             {
                 // https://waredrop.sgp1.digitaloceanspaces.com/sport_tights
                 String photoUrl = "https://waredrop.sgp1.digitaloceanspaces.com/" + photoName;
-                itemRepo.upload(photoUrl, description, fPrice, dPurchaseOn, iTimeWorn, category);
+                itemRepo.upload(photoUrl, description, fPrice, dPurchaseOn, iTimeWorn, category, userName);
             }
             else {
                 System.out.println("did not upload to s3");

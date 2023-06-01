@@ -21,10 +21,14 @@ export class ItemService {
     return firstValueFrom(this.httpClient.get<any>(get_item_url))
   }
 
-  getItemListByCategory(category: string) {
+      // query for list of items with category, fetch from: http://localhost:8080/api?category=top?user=celine
+
+  getItemListByCategory(category: string, userName: string) {
 
     // set up queryparams 
-    const queryParams = new HttpParams().set("category", category);
+    const queryParams = new HttpParams()
+                        .set("category", category)
+                        .set("user", userName);
 
     return firstValueFrom(this.httpClient.get<any>(get_list_category_url, { params: queryParams } ))
 

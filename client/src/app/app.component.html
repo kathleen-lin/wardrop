@@ -3,6 +3,15 @@
   <a [routerLink]="['/']">Category</a> 
   <button [routerLink]="['/add']">Add new clothes</button>
   <button>Add OOTD</button>
+  <div>
+    <form [formGroup]="userForm" (ngSubmit)="saveUser()">
+      <label>User: </label>
+      <input formControlName="userName">
+      <button type="submit"> save</button>
+    </form>
+    
+  </div>
+  
 </nav>
 <br>
 <div>

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ItemService } from '../item.service';
 
@@ -10,6 +10,8 @@ import { ItemService } from '../item.service';
 })
 export class AddItemComponent implements OnInit {
  
+  user!: string
+
   addForm!: FormGroup 
 
   @ViewChild('photo')
@@ -33,38 +35,32 @@ export class AddItemComponent implements OnInit {
       timeWorn: this.fb.control(''),
       category: this.fb.control(''),
 
-  })
+    })
+    // @ts-ignore
+    this.user = localStorage.getItem("user")
+    console.log(">>>" + this.user)
 
   }
   
   // post the data to backend, then persist into database
   processForm() {
-
-    // convert photo from a file to a dataUrl -> blob
-    // this.itemPhoto = this.photoFile.nativeElement.files[0]
-    // const reader = new FileReader();
-    // reader.onload = (e: any) => {
-    //   this.dataUrl = e.target.result;
-    // };
-    // reader.readAsDataURL(this.itemPhoto);
-
-    // console.log(this.dataUrl)
-
-    // this.imageBlob = this.dataURItoBlob(this.dataUrl)
-
-    const formdata = new FormData()
-    formdata.set('photo', this.photoFile.nativeElement.files[0])
-    formdata.set('description', this.addForm.get('description')?.value)
-    formdata.set('price', this.addForm.get('price')?.value)
-    formdata.set('purchaseOn', this.addForm.get('purchaseOn')?.value)
-    formdata.set('timeWorn', this.addForm.get('timeWorn')?.value)
-    formdata.set('category', this.addForm.get('category')?.value)
-    console.log(formdata.get('purchaseOn'))
-    this.httpClient.post('http://localhost:8080/api/upload', formdata)
-      .subscribe(response => console.log(response))
+      // @ts-ignore
+      this.user = localStorage.getItem("user")
+      console.log(">>>" + this.user)
+      const formdata = new FormData()
+      formdata.set('photo', this.photoFile.nativeElement.files[0])
+      formdata.set('description', this.addForm.get('description')?.value)
+      formdata.set('price', this.addForm.get('price')?.value)
+      formdata.set('purchaseOn', this.addForm.get('purchaseOn')?.value)
+      formdata.set('timeWorn', this.addForm.get('timeWorn')?.value)
+      formdata.set('category', this.addForm.get('category')?.value)
+      formdata.set('userName', this.user)
+      console.log(formdata.get('userName'))
+      this.httpClient.post('http://localhost:8080/api/upload', formdata)
+        .subscribe(response => console.log(response))
 
     // console.log(formdata.get('photo'))
-      
+    
   }
   
   dataURItoBlob(dataURI: String){

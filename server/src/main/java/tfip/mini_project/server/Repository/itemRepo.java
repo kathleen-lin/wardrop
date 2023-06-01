@@ -25,17 +25,17 @@ public class itemRepo {
     @Autowired
     private JdbcTemplate template;
 
-    private String FIND_LIST_BY_CATEGORY = "select * from item where category = ?";
+    private String FIND_LIST_BY_CATEGORY = "select * from item where category = ? and user_name = ?";
 
     private String FIND_ITEM_BY_ID = "select * from item where item_id= ?";
 
-    private String SQL_INSERT = "insert into item (photo_url, description, price, date_purchased, time_worn, category) values (?,?,?,?,?,?)";
+    private String SQL_INSERT = "insert into item (photo_url, description, price, date_purchased, time_worn, category, user_name) values (?,?,?,?,?,?,?)";
 
     private String SQL_INCREASE_TIME_WORN = "UPDATE item SET time_worn = time_worn + 1 WHERE item_id = ?";
 
 
     // create
-    public void upload(String photoUrl, String description, Float price, Date purchaseOn,  int timeWorn, String category) throws SQLException, IOException{
+    public void upload(String photoUrl, String description, Float price, Date purchaseOn,  int timeWorn, String category, String userName) throws SQLException, IOException{
         // try(Connection con = dataSource.getConnection(); 
         //     PreparedStatement prstmt = con.prepareStatement(SQL_INSERT))
         //     {
@@ -48,7 +48,7 @@ public class itemRepo {
         //     prstmt.setString(6, category);
         //     prstmt.executeUpdate();
         // }
-        template.update(SQL_INSERT, photoUrl, description, price, purchaseOn, timeWorn, category);
+        template.update(SQL_INSERT, photoUrl, description, price, purchaseOn, timeWorn, category, userName);
     }
 
     public Optional<Item> getItemById(int id) {
@@ -66,11 +66,11 @@ public class itemRepo {
 
 
     // Read (list)
-    public Optional<List<Item>> getItemListByCategory(String categoryName) {
+    public Optional<List<Item>> getItemListByCategory(String categoryName, String userName) {
     List<Item> itemsInCategory = new LinkedList<>();
 
     try {
-        final SqlRowSet rs = template.queryForRowSet(FIND_LIST_BY_CATEGORY, categoryName);
+        final SqlRowSet rs = template.queryForRowSet(FIND_LIST_BY_CATEGORY, categoryName, userName);
 
             while (rs.next()) {
                 Item it = new Item();
