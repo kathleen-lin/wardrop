@@ -1,9 +1,9 @@
 <nav>
-  <a [routerLink]="['/']">Home</a>
+  <a [routerLink]="['/']"><img src="../assets/wardrop_logo.png" alt="Logo"></a>
   <a [routerLink]="['/']">Category</a> 
   <button [routerLink]="['/add']">Add new clothes</button>
   <button>Add OOTD</button>
-  <div>
+  <div class="userForm">
     <form [formGroup]="userForm" (ngSubmit)="saveUser()">
       <label>User: </label>
       <input formControlName="userName">
@@ -14,6 +14,7 @@
   
 </nav>
 <br>
-<div>
-<router-outlet></router-outlet>
+
+<div class="container">
+    <router-outlet></router-outlet>
 </div>
