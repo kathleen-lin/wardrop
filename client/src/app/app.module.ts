@@ -12,6 +12,10 @@ import { HttpClientModule } from '@angular/common/http'
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import {MatDialogModule} from '@angular/material/dialog';
+import { RemovalComponent } from './components/removal.component';
+
 
 @NgModule({
   declarations: [
@@ -19,16 +23,18 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HomeComponent,
     CategoryComponent,
     AddItemComponent,
-    ItemComponent
+    ItemComponent,
+    RemovalComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatSlideToggleModule,
+    MatDialogModule
     // BrowserAnimationsModule,
-
   ],
   providers: [],
   bootstrap: [AppComponent]

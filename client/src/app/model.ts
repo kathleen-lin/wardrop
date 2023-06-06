@@ -10,3 +10,8 @@ export interface Item {
     category: string
 }
 
+
+export interface DialogData {
+    itemId: number
+    reason: string
+}

@@ -8,9 +8,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import org.bson.Document;
+
 // import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
@@ -25,6 +28,12 @@ public class itemRepo {
     @Autowired
     private JdbcTemplate template;
 
+    @Autowired
+    private MongoTemplate mongo;
+
+    private String MONGO_COLLECTION="wardrop";
+
+
     private String FIND_LIST_BY_CATEGORY = "select * from item where category = ? and user_name = ?";
 
     private String FIND_ITEM_BY_ID = "select * from item where item_id= ?";
@@ -32,7 +41,8 @@ public class itemRepo {
     private String SQL_INSERT = "insert into item (photo_url, description, price, date_purchased, time_worn, category, user_name) values (?,?,?,?,?,?,?)";
 
     private String SQL_INCREASE_TIME_WORN = "UPDATE item SET time_worn = time_worn + 1 WHERE item_id = ?";
-
+    
+    private String DELETE_BY_ID_SQL = "DELETE from item where item_id = ?";
 
     // create
     public void upload(String photoUrl, String description, Float price, Date purchaseOn,  int timeWorn, String category, String userName) throws SQLException, IOException{
@@ -109,6 +119,26 @@ public class itemRepo {
         return updatedBook;
     } 
 
-    // Delete
+    // Delete from item where item_id = 1;
+    public int deleteItem(int itemId){
+        
+        int deletedItem = 0;
+        deletedItem = template.update(DELETE_BY_ID_SQL, itemId);
+
+        return deletedItem;
+    }
+
+
+
+    // Mongo -- insert
+    
+    public void archiveDeleted(Item i, String reason){
+        // convert i to Bson doc
+        Document toAdd = i.toDocument(i.toJson());
+        toAdd.append("reason", reason);
+
+        mongo.insert(toAdd, MONGO_COLLECTION);
+
+    }
 
 }

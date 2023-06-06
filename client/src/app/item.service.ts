@@ -44,5 +44,15 @@ export class ItemService {
 
   }
 
+  // post mapping http://localhost:8080/api/item/id
+  removeItem(itemId: number, reason: string){
+
+    const header = new HttpHeaders().set('Content-Type', 'application/json')
+    const removal_url = get_url + '/' + itemId
+    const removalReason = { reason: reason }; 
+
+    return firstValueFrom(this.httpClient.post<any>(removal_url, removalReason, {headers: header}))
+    
+  }
 
 }

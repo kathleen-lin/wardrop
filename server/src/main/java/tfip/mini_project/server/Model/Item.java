@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import org.bson.Document;
+
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 
@@ -96,6 +99,12 @@ public class Item implements Serializable {
                         .build();
         
         return jo;
+    }
+
+    public Document toDocument(JsonObject jo){
+
+        return Document.parse(jo.toString());
+        
     }
 
  

@@ -1,0 +1,21 @@
+<h1> item id: {{ data.itemId }}</h1>
+<form [formGroup]="removalForm" (ngSubmit)="processRemoval()">
+    <label> Please choose one of the reasons below for removing </label>
+    <br>
+    <input type="radio" value = "discared_wear_and_tear" formControlName="removalReason" [(ngModel)]="data.reason"> I am discarding due to wear and tear
+    <br>
+    <input type="radio" value = "discared_do_not_fit" formControlName="removalReason" [(ngModel)]="data.reason"> I am discarding as it do not fit me
+    <br>
+    <input type="radio" value = "discared_not_wearing" formControlName="removalReason" [(ngModel)]="data.reason"> I am discarding as I do not wear it enough
+    <br>
+    <input type="radio" value = "giveaway_wear_and_tear" formControlName="removalReason" [(ngModel)]="data.reason"> I am giving away due to wear and tear
+    <br>
+    <input type="radio" value = "giveaway_do_not_fit" formControlName="removalReason" [(ngModel)]="data.reason"> I am away as it do not fit me
+    <br>
+    <input type="radio" value = "giveaway_not_wearing" formControlName="removalReason" [(ngModel)]="data.reason"> I am giveaway as I do not wear it enough
+
+
+
+<button (click)="close()">Cancel</button>
+<button type="submit"> Delete</button>
+</form>

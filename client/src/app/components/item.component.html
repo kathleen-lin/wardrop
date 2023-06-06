@@ -4,6 +4,8 @@
 <p>{{ selectedItem.timeWorn }}</p> -->
 
 <div *ngIf="selectedItem">
+    <button (click)="remove()">Remove from wardrobe</button>
+    <br>
     <img src = "{{ selectedItem.photoUrl }}" width = 200px>
     <p>{{ selectedItem.description }}</p>
     <p>{{ selectedItem.datePurchased }}</p>

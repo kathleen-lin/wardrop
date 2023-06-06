@@ -9,10 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -24,6 +26,7 @@ import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import tfip.mini_project.server.Model.Item;
+import tfip.mini_project.server.Payload.reasonPayload;
 import tfip.mini_project.server.Repository.itemRepo;
 import tfip.mini_project.server.Repository.s3Repo;
 
@@ -144,5 +147,32 @@ public class ItemController {
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping(path = "item/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> archiveItem(@PathVariable String id, @RequestBody reasonPayload payload){
+        
+        int userId = Integer.parseInt(id);
+        String reason = payload.getReason();
+        System.out.println(userId);
+        System.out.println(reason);
+        
+        try {
+            Item i = itemRepo.getItemById(userId).get();
+
+            itemRepo.archiveDeleted(i, reason);
+            itemRepo.deleteItem(userId);
+
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.toString(), HttpStatus.BAD_GATEWAY);
+        }
+        JsonObject jo = Json.createObjectBuilder()
+                        .add("message", "succefully archived!")
+                        .build();
+
+        return new ResponseEntity<String>(jo.toString(), HttpStatus.OK);
+
+    }
+
     
 }

@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ItemService } from '../item.service';
 import { Item } from '../model';
+import { MatDialog } from '@angular/material/dialog';
+import { RemovalComponent } from './removal.component';
 
 @Component({
   selector: 'app-item',
@@ -16,7 +18,9 @@ export class ItemComponent implements OnInit {
   
   selectedItem!: Item
 
-  constructor(private httpClient: HttpClient, private activatedRoute: ActivatedRoute, private itmSvc: ItemService, private router: Router) {}
+  reason!: string
+
+  constructor(private httpClient: HttpClient, private activatedRoute: ActivatedRoute, private itmSvc: ItemService, private router: Router, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(
@@ -39,6 +43,13 @@ export class ItemComponent implements OnInit {
       .then((r) => console.log(r))
       .catch((err) => console.log(err))
     location.reload()
+  }
+
+  remove() {
+    const dialogRef = this.dialog.open(RemovalComponent, {
+      data: {itemId: this.itemId, reason: this.reason}
+    })
+    
   }
 
 

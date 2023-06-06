@@ -15,6 +15,7 @@ export class AppComponent implements OnInit {
   constructor(private fb: FormBuilder, private router: Router){}
 
   ngOnInit(): void {
+      localStorage.clear()
       this.userForm = this.fb.group({
         userName: this.fb.control('')
       })
