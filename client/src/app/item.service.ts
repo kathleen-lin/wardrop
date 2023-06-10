@@ -62,13 +62,11 @@ export class ItemService {
        
   }
 
-  callAnalysis(fileName: string) {
+  analyseImage(fileName: string) {
     const queryParams = new HttpParams()
-    .set("image", fileName)
-    
-
-    return firstValueFrom(this.httpClient.get<any>(get_analysis_url, { params: queryParams } ))
+                        .set("i", fileName)
+  
+    return firstValueFrom(this.httpClient.get('http://localhost:8080/api/analyse', { params: queryParams }))
     
   }
-
 }

@@ -38,7 +38,6 @@ export class AddItemImageComponent {
     const file: File = this.photoFile.nativeElement.files[0];
     const fileName: string = file.name;
 
-    formdata.set('photo', file)
     this.itmSvc.uploadImage(formdata)
       .then((response) => {console.log(response)})
       .catch((err) => console.log(err));

@@ -211,15 +211,15 @@ public class ItemController {
         return new ResponseEntity<String>(jo.toString(), HttpStatus.OK);
 
     }
-
-    // GET http://localhost:4200/localhost8080/api/analyse?image=tights.jpg
+    // localhost8080/api/analyse?image=tights.jpg
     @CrossOrigin(origins = "*")
-    @GetMapping("analyse")
-    public void callApi (@RequestParam("image") String filename){
-
-        String imageUrl = "https://waredrop.sgp1.digitaloceanspaces.com/" + filename;
-        imaggaSvc.tagEndpoint(imageUrl);
+    @GetMapping("/analyse")
+    public void callApi (@RequestParam("i") String fileName){
         
+        System.out.println("passed from front end: " + fileName);
+        String imageUrl = "https://waredrop.sgp1.digitaloceanspaces.com/" + fileName;
+        imaggaSvc.tagEndpoint(imageUrl);
+        imaggaSvc.colorEndpoint(imageUrl);
     }
 
     
