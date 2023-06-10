@@ -1,7 +1,6 @@
-<form enctype="multipart/form-data" [formGroup]="addForm" (ngSubmit)="processForm()" method="post">
-    <label>Photo: </label>
-    <input type="file" accept="image/png, image/jpeg" formControlName="photo" #photo>
-<br>
+<!-- <img [src]="photoUrl" width = "200px"> -->
+<form enctype="multipart/form-data" (ngSubmit)="processForm()" method="post" [formGroup] ="addForm">
+    
     <label >Description: </label>
     <input type="text" formControlName="description">
 <br>

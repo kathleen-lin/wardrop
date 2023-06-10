@@ -15,6 +15,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import {MatDialogModule} from '@angular/material/dialog';
 import { RemovalComponent } from './components/removal.component';
+import { AddItemImageComponent } from './components/add-item-image.component';
+import { AnalyseComponent } from './components/analyse.component';
 
 
 @NgModule({
@@ -24,7 +26,9 @@ import { RemovalComponent } from './components/removal.component';
     CategoryComponent,
     AddItemComponent,
     ItemComponent,
-    RemovalComponent
+    RemovalComponent,
+    AddItemImageComponent,
+    AnalyseComponent
   ],
   imports: [
     BrowserModule,

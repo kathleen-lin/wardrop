@@ -29,6 +29,7 @@ import tfip.mini_project.server.Model.Item;
 import tfip.mini_project.server.Payload.reasonPayload;
 import tfip.mini_project.server.Repository.itemRepo;
 import tfip.mini_project.server.Repository.s3Repo;
+import tfip.mini_project.server.Service.imaggaSvc;
 
 @RestController
 @RequestMapping("/api")
@@ -40,6 +41,9 @@ public class ItemController {
 
     @Autowired
     private s3Repo s3Repo;
+
+    @Autowired
+    private imaggaSvc imaggaSvc;
 
     @CrossOrigin(origins = "*")
     @GetMapping("item/{id}")
@@ -90,32 +94,64 @@ public class ItemController {
                 
     }
 
-    @PostMapping(path="/upload", consumes= MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> postItem(@RequestPart MultipartFile photo, @RequestPart String description, @RequestPart String price, @RequestPart String purchaseOn, @RequestPart String timeWorn, @RequestPart String category, @RequestPart String userName) {
+    // @PostMapping(path="/upload/details", consumes= MediaType.MULTIPART_FORM_DATA_VALUE)
+    // public ResponseEntity<String> postItem(@RequestPart MultipartFile photo, @RequestPart String description, @RequestPart String price, @RequestPart String purchaseOn, @RequestPart String timeWorn, @RequestPart String category, @RequestPart String userName) {
 
-        System.out.println(photo.getOriginalFilename());
-        System.out.println(description);
-        System.out.println(price);
-        System.out.println(purchaseOn);
-        System.out.println(timeWorn);
-        System.out.println(category);
+    //     System.out.println(photo.getOriginalFilename());
+    //     System.out.println(description);
+    //     System.out.println(price);
+    //     System.out.println(purchaseOn);
+    //     System.out.println(timeWorn);
+    //     System.out.println(category);
 
-        Float fPrice = Float.parseFloat(price);
-        Date dPurchaseOn = Date.valueOf(purchaseOn);
-        int iTimeWorn = Integer.parseInt(timeWorn);
+    //     Float fPrice = Float.parseFloat(price);
+    //     Date dPurchaseOn = Date.valueOf(purchaseOn);
+    //     int iTimeWorn = Integer.parseInt(timeWorn);
 
-        String photoName = description.replace(" ", "_").toLowerCase();
+    //     String photoName = description.replace(" ", "_").toLowerCase();
 
-        if (photoName.length() > 20) {
-            photoName = photoName.substring(0, 20);
-        }
+    //     if (photoName.length() > 20) {
+    //         photoName = photoName.substring(0, 20);
+    //     }
 
+    //     try {
+    //         if (s3Repo.upload(photo, description, category, photoName))
+    //         {
+    //             // https://waredrop.sgp1.digitaloceanspaces.com/sport_tights
+    //             String photoUrl = "https://waredrop.sgp1.digitaloceanspaces.com/" + photoName;
+    //             itemRepo.upload(photoUrl, description, fPrice, dPurchaseOn, iTimeWorn, category, userName);
+    //         }
+    //         else {
+    //             System.out.println("did not upload to s3");
+    //         }
+    //     } catch (Exception e) {
+
+    //         e.printStackTrace();
+    //         return new ResponseEntity<String>("Failed, go troubleshoot zzz", HttpStatus.BAD_GATEWAY);
+
+    //     }
+    //     JsonObject jo = Json.createObjectBuilder()
+    //                     .add("message", "succeed!")
+    //                     .build();
+    //     return new ResponseEntity<String>(jo.toString(), HttpStatus.OK);
+
+
+    // }     
+    @CrossOrigin(origins = "*")
+    @PostMapping(path="/uploadImage", consumes= MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> uploadPhotoS3(@RequestPart MultipartFile photo) {
+
+        // JsonObject jo = Json.createObjectBuilder()
+        //                 .add("name", photo.getOriginalFilename())
+        //                 .add("type", photo.getContentType())
+        //                 .build();
+        // return new ResponseEntity<String>(jo.toString(), HttpStatus.OK);
+        String photoUrl = "";
         try {
-            if (s3Repo.upload(photo, description, category, photoName))
+            if (s3Repo.uploadImage(photo))
             {
                 // https://waredrop.sgp1.digitaloceanspaces.com/sport_tights
-                String photoUrl = "https://waredrop.sgp1.digitaloceanspaces.com/" + photoName;
-                itemRepo.upload(photoUrl, description, fPrice, dPurchaseOn, iTimeWorn, category, userName);
+                photoUrl = "https://waredrop.sgp1.digitaloceanspaces.com/" + photo.getOriginalFilename();
             }
             else {
                 System.out.println("did not upload to s3");
@@ -128,11 +164,13 @@ public class ItemController {
         }
         JsonObject jo = Json.createObjectBuilder()
                         .add("message", "succeed!")
+                        .add("photoUrl", photoUrl)
                         .build();
         return new ResponseEntity<String>(jo.toString(), HttpStatus.OK);
 
 
     }     
+
     @CrossOrigin(origins = "*")
     @PutMapping("item/{id}")
     public ResponseEntity<String> increaseTimeWorn(@PathVariable int id){
@@ -172,6 +210,16 @@ public class ItemController {
 
         return new ResponseEntity<String>(jo.toString(), HttpStatus.OK);
 
+    }
+
+    // GET http://localhost:4200/localhost8080/api/analyse?image=tights.jpg
+    @CrossOrigin(origins = "*")
+    @GetMapping("analyse")
+    public void callApi (@RequestParam("image") String filename){
+
+        String imageUrl = "https://waredrop.sgp1.digitaloceanspaces.com/" + filename;
+        imaggaSvc.tagEndpoint(imageUrl);
+        
     }
 
     

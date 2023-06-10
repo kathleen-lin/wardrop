@@ -5,6 +5,7 @@ import { firstValueFrom, lastValueFrom } from 'rxjs';
 const get_url = "http://localhost:8080/api/item"
 // http://localhost:8080/api?category=top
 const get_list_category_url = "http://localhost:8080/api"
+const get_analysis_url = "http:localhost8080/api/analyse"
 
 @Injectable({
   providedIn: 'root'
@@ -52,6 +53,21 @@ export class ItemService {
     const removalReason = { reason: reason }; 
 
     return firstValueFrom(this.httpClient.post<any>(removal_url, removalReason, {headers: header}))
+    
+  }
+
+  uploadImage(fd: FormData) {
+    
+    return firstValueFrom(this.httpClient.post('http://localhost:8080/api/uploadImage', fd))
+       
+  }
+
+  callAnalysis(fileName: string) {
+    const queryParams = new HttpParams()
+    .set("image", fileName)
+    
+
+    return firstValueFrom(this.httpClient.get<any>(get_analysis_url, { params: queryParams } ))
     
   }
 

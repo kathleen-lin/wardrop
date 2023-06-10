@@ -1,14 +1,16 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ItemService } from '../item.service';
+import { Observable, of } from 'rxjs';
+import { PhotoService } from '../photo.service';
 
 @Component({
   selector: 'app-add-item',
   templateUrl: './add-item.component.html',
   styleUrls: ['./add-item.component.css']
 })
-export class AddItemComponent implements OnInit {
+export class AddItemComponent implements OnInit, AfterViewInit {
  
   user!: string
 
@@ -17,18 +19,15 @@ export class AddItemComponent implements OnInit {
   @ViewChild('photo')
   photoFile!: ElementRef
 
-  // itemPhoto!: File
 
-  // dataUrl = ""
-
+  photoUrl! :string
   // imageBlob!: Blob
 
-  constructor(private fb: FormBuilder, private httpClient: HttpClient) {}
+  constructor(private fb: FormBuilder, private httpClient: HttpClient, private photoSvc: PhotoService) {}
+  
 
   ngOnInit(): void {
-
     this.addForm = this.fb.group({
-      photo: this.fb.control(''),
       description: this.fb.control(''),
       price: this.fb.control(0),
       purchaseOn: this.fb.control(''),
@@ -38,8 +37,13 @@ export class AddItemComponent implements OnInit {
     })
     // @ts-ignore
     this.user = localStorage.getItem("user")
-    console.log(">>>" + this.user)
+    
+  }
 
+  ngAfterViewInit(): void {
+    this.photoUrl = this.photoSvc.getImageUrl()
+    console.log("HELLO: " + this.photoUrl)
+      
   }
   
   // post the data to backend, then persist into database

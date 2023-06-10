@@ -15,3 +15,8 @@ export interface DialogData {
     itemId: number
     reason: string
 }
+
+export interface ApiResponse {
+    message: string;
+    photoUrl: string;
+  }

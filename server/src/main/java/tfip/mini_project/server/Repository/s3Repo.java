@@ -21,22 +21,16 @@ public class s3Repo {
     @Autowired
     private AmazonS3 s3;
 
-    public boolean upload(MultipartFile photo, String description, String category, String photoUrl) throws IOException {
+    public boolean uploadImage(MultipartFile photo) throws IOException {
         
-        Map<String, String> userData = new HashMap<>();
         
-        userData.put("description", description);
-		userData.put("category", category);
-
 		ObjectMetadata metadata = new ObjectMetadata();
-		metadata.setUserMetadata(userData);
         metadata.setContentType(photo.getContentType());
         metadata.setContentLength(photo.getSize());
 
-		
-		
+
 		try {
-				PutObjectRequest putReq = new PutObjectRequest("waredrop", photoUrl, photo.getInputStream(), metadata);
+				PutObjectRequest putReq = new PutObjectRequest("waredrop", photo.getOriginalFilename(), photo.getInputStream(), metadata);
 				putReq = putReq.withCannedAcl(CannedAccessControlList.PublicRead);
                 s3.putObject(putReq);
 			} catch (FileNotFoundException e) {
