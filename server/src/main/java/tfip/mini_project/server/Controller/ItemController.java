@@ -1,5 +1,7 @@
 package tfip.mini_project.server.Controller;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
@@ -21,14 +23,21 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.File;
+
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
+import tfip.mini_project.server.Configuration.GoogleDriveConfig;
 import tfip.mini_project.server.Model.Item;
 import tfip.mini_project.server.Payload.reasonPayload;
 import tfip.mini_project.server.Repository.itemRepo;
 import tfip.mini_project.server.Repository.s3Repo;
+import tfip.mini_project.server.Service.GoogleDriveManager;
 import tfip.mini_project.server.Service.imaggaSvc;
 
 @RestController
@@ -44,6 +53,9 @@ public class ItemController {
 
     @Autowired
     private imaggaSvc imaggaSvc;
+
+    @Autowired
+    private GoogleDriveManager fileManager;
 
     @CrossOrigin(origins = "*")
     @GetMapping("item/{id}")
@@ -218,5 +230,41 @@ public class ItemController {
         }
     }
 
+    @CrossOrigin(origins = "*")
+    @GetMapping("/drive/all")
+    public void listFiles() throws IOException {
+        List<File> files = fileManager.listFilesInFolder();
+
+        if (files.isEmpty()) {
+            System.out.println("no files");;
+        } else {
+            for (int i = 0; i < files.size(); i++){
+                System.out.println(files.get(i).getName());
+                files.iterator().next();
+
+            }
+        }
+
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping(path="/drive/upload", consumes= MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> uploadImage(@RequestParam MultipartFile image) {
+
+        System.out.println(image.getOriginalFilename());
+        try {
+            String fileId = fileManager.uploadFile(image);
+            if (fileId != null) {
+                return ResponseEntity.ok("Image uploaded successfully. File ID: " + fileId);
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Failed to upload image to Google Drive.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while uploading the image.");
+        }
+    }
     
 }
