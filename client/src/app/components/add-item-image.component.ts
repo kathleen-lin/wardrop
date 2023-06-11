@@ -2,7 +2,6 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ItemService } from '../item.service';
 import { Router } from '@angular/router';
-import { ApiResponse } from '../model';
 import { PhotoService } from '../photo.service';
 
 @Component({
@@ -14,12 +13,8 @@ export class AddItemImageComponent {
 
   imageForm! :FormGroup
 
-  response!: ApiResponse
-
   @ViewChild('photo')
   photoFile!: ElementRef
-
-  imageUrl = ""
 
   constructor(private fb: FormBuilder, private itmSvc: ItemService, private photoSvc: PhotoService, private router: Router) {}
 
@@ -34,14 +29,20 @@ export class AddItemImageComponent {
   sendImage() {
     
     const formdata = new FormData()
-
+    
     const file: File = this.photoFile.nativeElement.files[0];
-    const fileName: string = file.name;
+    formdata.set('photo', file)
 
+    const fileName: string = file.name;
+    const imageUrl = "https://waredrop.sgp1.digitaloceanspaces.com/" + fileName
+    this.photoSvc.setImageUrl(imageUrl)
+    
     this.itmSvc.uploadImage(formdata)
-      .then((response) => {console.log(response)})
+      .then((response) => {
+        console.log(response);
+        this.router.navigate(['/analyse', fileName])})
       .catch((err) => console.log(err));
-    this.router.navigate(['/analyse', fileName])
+    
 
   }
 

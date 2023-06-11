@@ -16,7 +16,6 @@ export interface DialogData {
     reason: string
 }
 
-export interface ApiResponse {
-    message: string;
-    photoUrl: string;
+export interface analysisResult {
+    itemDescription: string;
   }

@@ -19,40 +19,39 @@ export class AddItemComponent implements OnInit, AfterViewInit {
   @ViewChild('photo')
   photoFile!: ElementRef
 
+  itmDescription = ''
 
   photoUrl! :string
-  // imageBlob!: Blob
 
   constructor(private fb: FormBuilder, private httpClient: HttpClient, private photoSvc: PhotoService) {}
   
 
   ngOnInit(): void {
+    this.photoUrl = this.photoSvc.getImageUrl(); 
+    console.log(this.photoUrl);
+    // @ts-ignore
+    this.user = localStorage.getItem("user")
+    this.itmDescription = this.photoSvc.getItemDescription();
     this.addForm = this.fb.group({
       description: this.fb.control(''),
-      price: this.fb.control(0),
+      price: this.fb.control(''),
       purchaseOn: this.fb.control(''),
       timeWorn: this.fb.control(''),
       category: this.fb.control(''),
-
-    })
-    // @ts-ignore
-    this.user = localStorage.getItem("user")
-    
+      })
   }
 
   ngAfterViewInit(): void {
-    this.photoUrl = this.photoSvc.getImageUrl()
-    console.log("HELLO: " + this.photoUrl)
-      
+      this.addForm = this.createForm(this.itmDescription);
   }
+
+  
   
   // post the data to backend, then persist into database
   processForm() {
       // @ts-ignore
-      this.user = localStorage.getItem("user")
-      console.log(">>>" + this.user)
       const formdata = new FormData()
-      formdata.set('photo', this.photoFile.nativeElement.files[0])
+      formdata.set('photoUrl', this.photoUrl)
       formdata.set('description', this.addForm.get('description')?.value)
       formdata.set('price', this.addForm.get('price')?.value)
       formdata.set('purchaseOn', this.addForm.get('purchaseOn')?.value)
@@ -60,21 +59,26 @@ export class AddItemComponent implements OnInit, AfterViewInit {
       formdata.set('category', this.addForm.get('category')?.value)
       formdata.set('userName', this.user)
       console.log(formdata.get('userName'))
-      this.httpClient.post('http://localhost:8080/api/upload', formdata)
+      this.httpClient.post('http://localhost:8080/api/upload/details', formdata)
         .subscribe(response => console.log(response))
 
     // console.log(formdata.get('photo'))
     
   }
+  createForm(itmDescription: string): FormGroup{
+    const currentDate = new Date().toISOString().substring(0, 10); // Get current date in "yyyy-MM-dd" format
+
+    const form = this.fb.group({
+      description: this.fb.control(itmDescription),
+      price: this.fb.control(''),
+      purchaseOn: this.fb.control(currentDate),
+      timeWorn: this.fb.control(0),
+      category: this.fb.control(''),
+  })
+
+  return form
+}
   
-  dataURItoBlob(dataURI: String){
-    var byteString = atob(dataURI.split(',')[1]);
-    let mimeString = dataURI.split(',')[0].split(';')[0];
-    var ar = new ArrayBuffer(byteString.length);
-    var ai = new Uint8Array(ar);
-    for (var i=0; i <byteString.length; i++){
-      ai[i] = byteString.charCodeAt(i);
-    }
-    return new Blob([ar], {type: mimeString});
-  }
+  
+  
 }

@@ -5,9 +5,18 @@ import { Injectable } from '@angular/core';
 })
 export class PhotoService {
 
+  private itemDescription: string = '';
   private imageUrl: string = '';
 
-  setImageUrl(url: string): void {
+  setItemDescription(description: string): void {
+    this.itemDescription = description;
+  }
+
+  getItemDescription(): string {
+    return this.itemDescription;
+  }
+
+  setImageUrl (url: string): void {
     this.imageUrl = url;
   }
 
