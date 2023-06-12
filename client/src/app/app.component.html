@@ -2,7 +2,7 @@
   <a [routerLink]="['/']"><img src="../assets/wardrop_logo.png" alt="Logo"></a>
   <a [routerLink]="['/']">Category</a> 
   <button [routerLink]="['/add']">Add new clothes</button>
-  <button>Add OOTD</button>
+  <button (click)="callGDrive()">Add OOTD</button>
   <div class="userForm">
     <form [formGroup]="userForm" (ngSubmit)="saveUser()">
       <label>User: </label>

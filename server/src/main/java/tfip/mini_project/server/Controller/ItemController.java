@@ -3,6 +3,7 @@ package tfip.mini_project.server.Controller;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.sql.Date;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,21 +24,28 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeRequestUrl;
+import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
+import com.google.api.services.drive.model.FileList;
 
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
-import tfip.mini_project.server.Configuration.GoogleDriveConfig;
+import jakarta.servlet.http.HttpServletRequest;
 import tfip.mini_project.server.Model.Item;
 import tfip.mini_project.server.Payload.reasonPayload;
 import tfip.mini_project.server.Repository.itemRepo;
 import tfip.mini_project.server.Repository.s3Repo;
-import tfip.mini_project.server.Service.GoogleDriveManager;
+import tfip.mini_project.server.Service.GoogleDriveAuthService;
 import tfip.mini_project.server.Service.imaggaSvc;
 
 @RestController
@@ -55,8 +63,9 @@ public class ItemController {
     private imaggaSvc imaggaSvc;
 
     @Autowired
-    private GoogleDriveManager fileManager;
-
+    private GoogleDriveAuthService authSvc;
+  
+  
     @CrossOrigin(origins = "*")
     @GetMapping("item/{id}")
     public ResponseEntity<String> getItemById (@PathVariable int id){
@@ -231,40 +240,143 @@ public class ItemController {
     }
 
     @CrossOrigin(origins = "*")
-    @GetMapping("/drive/all")
-    public void listFiles() throws IOException {
-        List<File> files = fileManager.listFilesInFolder();
+    @GetMapping("/drive")
+    public ResponseEntity<String> authenticate() throws IOException {
+        
+        boolean isUserAuthenticated = false;
+        GoogleAuthorizationCodeFlow flow = authSvc.getFlow();
+        Credential cred = flow.loadCredential("user3");
 
-        if (files.isEmpty()) {
-            System.out.println("no files");;
-        } else {
-            for (int i = 0; i < files.size(); i++){
-                System.out.println(files.get(i).getName());
-                files.iterator().next();
-
+        if (cred!=null) {
+            boolean tokenValid = cred.refreshToken();
+            if (tokenValid){
+                isUserAuthenticated = true;
             }
         }
+
+        if (isUserAuthenticated){
+            JsonObject respOb = Json.createObjectBuilder()
+                                .add("nextUrl", "drive/home")
+                                .build();
+            return new ResponseEntity<String>(respOb.toString(), HttpStatus.OK);
+        }
+
+            JsonObject respOb = Json.createObjectBuilder()
+                                .add("nextUrl", "drive/signin")
+                                .build();
+            return new ResponseEntity<String>(respOb.toString(), HttpStatus.OK);
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/drive/signin")
+    public ResponseEntity<String> doSignin() throws IOException {
+
+        GoogleAuthorizationCodeRequestUrl url = authSvc.getFlow().newAuthorizationUrl();
+        String redirectUrl = url.setRedirectUri("http://localhost:8080/api/oauth").setAccessType("offline").build();
+            JsonObject respOb = Json.createObjectBuilder()
+                                .add("redirectUrl", redirectUrl)
+                                .build();
+
+        return new ResponseEntity<String>(respOb.toString(), HttpStatus.OK);
 
     }
 
     @CrossOrigin(origins = "*")
-    @PostMapping(path="/drive/upload", consumes= MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> uploadImage(@RequestParam MultipartFile image) {
-
-        System.out.println(image.getOriginalFilename());
-        try {
-            String fileId = fileManager.uploadFile(image);
-            if (fileId != null) {
-                return ResponseEntity.ok("Image uploaded successfully. File ID: " + fileId);
-            } else {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body("Failed to upload image to Google Drive.");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An error occurred while uploading the image.");
+    @GetMapping("/oauth")
+    public ResponseEntity<String> saveAuthCode(@RequestParam("code") String code) throws IOException {
+        System.out.println(code);
+        if (code != null){
+            saveToken(code);
+            JsonObject respOb = Json.createObjectBuilder()
+                                .add("message", "you can now close the window")
+                                .build();
+        return new ResponseEntity<String>(respOb.toString(), HttpStatus.OK);
         }
+
+         JsonObject respOb = Json.createObjectBuilder()
+                                .add("message","something wrong")
+                                .build();
+        return new ResponseEntity<String>(respOb.toString(), HttpStatus.BAD_REQUEST);
     }
+
+    private void saveToken(String code) throws IOException{
+        GoogleTokenResponse response = authSvc.getFlow().newTokenRequest(code).setRedirectUri("http://localhost:8080/api/oauth").execute();
+        
+        authSvc.getFlow().createAndStoreCredential(response, "user3");        
+
+    }
+    
+    @CrossOrigin(origins = "*")
+    @GetMapping("/drive/home")
+    public void listFilesInFolder() throws IOException, GeneralSecurityException {
+        
+
+    // public Drive createDriveService() throws IOException, GeneralSecurityException {
+        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+
+        Credential credential = authSvc.getFlow().loadCredential("user3");
+        JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+
+
+        Drive drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+                .setApplicationName("wardrop")
+                .build();
+
+
+        String folderId = getFolderIdByName("OOTD");
+
+        System.out.println(folderId);
+
+        if (folderId == null) {
+        System.out.println("Folder not found: " + "OOTD");
+        // return Collections.emptyList();
+        }
+        
+        String query = "'" + folderId + "' in parents";
+        FileList result = drive.files().list()
+            .setQ(query)
+            .setFields("nextPageToken, files(id, name)")
+            .execute();
+
+        System.out.println(result.toString());
+    //     List<File> files = result.getFiles();
+    //     if (files != null && !files.isEmpty()) {
+    //     System.out.println("Files in Folder:");
+    //     for (File file : files) {
+    //         System.out.println("File Name: " + file.getName());
+    //     }
+    // } else {
+    //     System.out.println("No files found in the folder.");
+    // }
+    }
+
+    private String getFolderIdByName(String folderName) throws IOException, GeneralSecurityException {
+        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+
+        Credential credential = authSvc.getFlow().loadCredential("user3");
+        JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+
+
+        Drive drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+                .setApplicationName("wardrop")
+                .build();
+
+        String query = "mimeType='application/vnd.google-apps.folder' and name='" + folderName + "'";
+        FileList result = drive.files().list()
+            .setQ(query)
+            .setSpaces("drive")
+            .setFields("files(id)")
+            .execute();
+        List<File> files = result.getFiles();
+        
+        return files.isEmpty() ? null : files.get(0).getId();
+    }
+
+    
+
+
+
+
+
     
 }

@@ -17,6 +17,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { RemovalComponent } from './components/removal.component';
 import { AddItemImageComponent } from './components/add-item-image.component';
 import { AnalyseComponent } from './components/analyse.component';
+import { DriveComponent } from './components/drive.component';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { AnalyseComponent } from './components/analyse.component';
     ItemComponent,
     RemovalComponent,
     AddItemImageComponent,
-    AnalyseComponent
+    AnalyseComponent,
+    DriveComponent
   ],
   imports: [
     BrowserModule,

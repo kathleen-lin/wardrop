@@ -6,6 +6,7 @@ import { ItemComponent } from './components/item.component';
 import { AddItemComponent } from './components/add-item.component';
 import { AddItemImageComponent } from './components/add-item-image.component';
 import { AnalyseComponent } from './components/analyse.component';
+import { DriveComponent } from './components/drive.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'add', component: AddItemImageComponent },
   { path: 'add/details', component: AddItemComponent },
   { path: 'analyse/:filename', component: AnalyseComponent },
+  { path: 'drive', component: DriveComponent },
   { path: "**", redirectTo:'/', pathMatch: 'full'}
 ];
 

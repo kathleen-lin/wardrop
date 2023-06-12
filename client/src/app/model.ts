@@ -19,3 +19,11 @@ export interface DialogData {
 export interface analysisResult {
     itemDescription: string;
   }
+
+export interface nextUrl {
+    nextUrl: string;
+  }
+
+export interface redirectUrl {
+    redirectUrl: string;
+  }

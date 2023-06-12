@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ItemService } from '../item.service';
 import { Observable, of } from 'rxjs';
 import { PhotoService } from '../photo.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-item',
@@ -23,7 +24,7 @@ export class AddItemComponent implements OnInit, AfterViewInit {
 
   photoUrl! :string
 
-  constructor(private fb: FormBuilder, private httpClient: HttpClient, private photoSvc: PhotoService) {}
+  constructor(private fb: FormBuilder, private itmSvc: ItemService, private photoSvc: PhotoService, private router: Router) {}
   
 
   ngOnInit(): void {
@@ -59,9 +60,12 @@ export class AddItemComponent implements OnInit, AfterViewInit {
       formdata.set('category', this.addForm.get('category')?.value)
       formdata.set('userName', this.user)
       console.log(formdata.get('userName'))
-      this.httpClient.post('http://localhost:8080/api/upload/details', formdata)
-        .subscribe(response => console.log(response))
-
+      this.itmSvc.postItem(formdata)
+                  .then((result) => {
+                      console.log(result);
+                      this.router.navigate(['/category', this.addForm.get('category')?.value]);
+                    })
+                    .catch((err) => console.log(err))
     // console.log(formdata.get('photo'))
     
   }

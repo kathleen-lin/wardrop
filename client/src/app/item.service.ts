@@ -57,7 +57,8 @@ export class ItemService {
   }
 
   uploadImage(fd: FormData) {
-    
+
+
     return firstValueFrom(this.httpClient.post('http://localhost:8080/api/uploadImage', fd))
        
   }
@@ -68,5 +69,18 @@ export class ItemService {
   
     return firstValueFrom(this.httpClient.get('http://localhost:8080/api/analyse', { params: queryParams }))
     
+  }
+
+  postItem (fd: FormData) {
+    
+    return firstValueFrom (this.httpClient.post('http://localhost:8080/api/upload/details', fd))
+  }
+
+  Gdrive() {
+    return firstValueFrom(this.httpClient.get('http://localhost:8080/api/drive'))
+  }
+
+  getAuthUrl(url: string) {
+    return firstValueFrom(this.httpClient.get(url))
   }
 }
