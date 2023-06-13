@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +28,8 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeRequestUrl;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.api.client.http.FileContent;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
@@ -40,7 +41,6 @@ import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
-import jakarta.servlet.http.HttpServletRequest;
 import tfip.mini_project.server.Model.Item;
 import tfip.mini_project.server.Payload.reasonPayload;
 import tfip.mini_project.server.Repository.itemRepo;
@@ -308,10 +308,9 @@ public class ItemController {
     
     @CrossOrigin(origins = "*")
     @GetMapping("/drive/home")
-    public void listFilesInFolder() throws IOException, GeneralSecurityException {
+    public ResponseEntity<String> listFilesInFolder() throws IOException, GeneralSecurityException {
         
-
-    // public Drive createDriveService() throws IOException, GeneralSecurityException {
+        // create a drive
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
         Credential credential = authSvc.getFlow().loadCredential("user3");
@@ -322,35 +321,112 @@ public class ItemController {
                 .setApplicationName("wardrop")
                 .build();
 
+        // folderId to be returned
+        String folderId = createFolderIfNotExists("OOTD");
 
-        String folderId = getFolderIdByName("OOTD");
-
-        System.out.println(folderId);
-
-        if (folderId == null) {
-        System.out.println("Folder not found: " + "OOTD");
-        // return Collections.emptyList();
-        }
-        
+       // search files in the folder
         String query = "'" + folderId + "' in parents";
         FileList result = drive.files().list()
             .setQ(query)
             .setFields("nextPageToken, files(id, name)")
             .execute();
+        
+        List<File> files = result.getFiles();
+        if (files != null && !files.isEmpty()) {
+            // create a json array with the id
+            JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
 
-        System.out.println(result.toString());
-    //     List<File> files = result.getFiles();
-    //     if (files != null && !files.isEmpty()) {
-    //     System.out.println("Files in Folder:");
-    //     for (File file : files) {
-    //         System.out.println("File Name: " + file.getName());
-    //     }
-    // } else {
-    //     System.out.println("No files found in the folder.");
-    // }
+
+            for (File file : files) {
+            // add the file id to the json array
+            jsonArrayBuilder.add(file.getId());
+            }
+            JsonArray jsonArray = jsonArrayBuilder.build();
+
+            JsonObject jo = Json.createObjectBuilder()
+                            .add("folderId", folderId)
+                            .add("files", jsonArray)
+                            .build();
+            
+            return new ResponseEntity<String>(jo.toString(), HttpStatus.OK);
+        } 
+        JsonArray jsonArray = Json.createArrayBuilder().build();
+        JsonObject jo = Json.createObjectBuilder()
+                            .add("folderId", folderId)
+                            .add("files", jsonArray)
+                            .build();
+        
+            return new ResponseEntity<String>(jo.toString(), HttpStatus.OK);
+
+
     }
 
-    private String getFolderIdByName(String folderName) throws IOException, GeneralSecurityException {
+    // private String getFolderIdByName(String folderName) throws IOException, GeneralSecurityException {
+    //     final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+
+    //     Credential credential = authSvc.getFlow().loadCredential("user3");
+    //     JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+
+
+    //     Drive drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+    //             .setApplicationName("wardrop")
+    //             .build();
+
+    //     String query = "mimeType='application/vnd.google-apps.folder' and name='" + folderName + "'";
+    //     FileList result = drive.files().list()
+    //         .setQ(query)
+    //         .setSpaces("drive")
+    //         .setFields("files(id)")
+    //         .execute();
+    //     List<File> files = result.getFiles();
+        
+    //     return files.isEmpty() ? null : files.get(0).getId();
+    // }
+    @CrossOrigin(origins = "*")
+    @PostMapping(path="/drive/testupload/{parentFolderId}", consumes= MediaType.MULTIPART_FORM_DATA_VALUE)
+    public File uploadFile(@PathVariable String parentFolderId, @RequestBody MultipartFile image) throws IOException, GeneralSecurityException {
+        System.out.println(parentFolderId);
+
+        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+
+        Credential credential = authSvc.getFlow().loadCredential("user3");
+        JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+
+
+        Drive drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+                .setApplicationName("wardrop")
+                .build();
+
+        File fileMetadata = new File();
+        fileMetadata.setName(image.getOriginalFilename());
+        fileMetadata.setParents(Collections.singletonList(parentFolderId));
+
+        java.io.File tempFile = java.io.File.createTempFile("temp", image.getOriginalFilename());
+        image.transferTo(tempFile);
+
+        FileContent mediaContent = new FileContent(image.getContentType(), tempFile);
+        
+
+        try {
+            File file = drive.files().create(fileMetadata, mediaContent)
+                .setFields("id, parents")
+                .execute();
+            System.out.println("File ID: " + file.getId());
+            return file;
+        } catch (GoogleJsonResponseException e) {
+        System.err.println("Unable to upload file: " + e.getDetails());
+        throw e;
+        } finally {
+        if (tempFile != null) {
+        tempFile.delete();
+    }
+}
+    }
+
+    
+    private String createFolderIfNotExists(String folderName) throws IOException, GeneralSecurityException {
+
+        // create drive
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
         Credential credential = authSvc.getFlow().loadCredential("user3");
@@ -363,17 +439,25 @@ public class ItemController {
 
         String query = "mimeType='application/vnd.google-apps.folder' and name='" + folderName + "'";
         FileList result = drive.files().list()
-            .setQ(query)
-            .setSpaces("drive")
-            .setFields("files(id)")
-            .execute();
+                .setQ(query)
+                .setSpaces("drive")
+                .setFields("files(id)")
+                .execute();
         List<File> files = result.getFiles();
-        
-        return files.isEmpty() ? null : files.get(0).getId();
+        if (!files.isEmpty()) {
+            return files.get(0).getId();
+        }
+
+        File folderMetadata = new File();
+        folderMetadata.setName(folderName);
+        folderMetadata.setMimeType("application/vnd.google-apps.folder");
+
+        File createdFolder = drive.files().create(folderMetadata)
+                .setFields("id")
+                .execute();
+
+        return createdFolder.getId();
     }
-
-    
-
 
 
 

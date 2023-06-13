@@ -27,3 +27,8 @@ export interface nextUrl {
 export interface redirectUrl {
     redirectUrl: string;
   }
+
+export interface OOTDfiles{
+    folderId: string;
+    files: string[];
+}

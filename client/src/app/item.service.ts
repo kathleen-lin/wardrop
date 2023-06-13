@@ -83,4 +83,8 @@ export class ItemService {
   getAuthUrl(url: string) {
     return firstValueFrom(this.httpClient.get(url))
   }
+
+  getOOTDdrive() {
+    return firstValueFrom(this.httpClient.get('http://localhost:8080/api/drive/home'))
+  }
 }

@@ -67,6 +67,7 @@ export class AppComponent implements OnInit {
         } else {
           // navigate to drive component
           this.router.navigate(["/drive"]);
+          
         }
       })
       .catch((err) => console.log(err));

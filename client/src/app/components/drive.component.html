@@ -1,1 +1,9 @@
-<p>drive works!</p>
+<div>
+    <h2>OOTD Images</h2>
+    <div class="image-container">
+      <div *ngFor="let imageId of ootdImages">
+        <img [src]="getDriveImageURL(imageId)" alt="OOTD Image" width="200px">
+      </div>
+    </div>
+  </div>
+  
