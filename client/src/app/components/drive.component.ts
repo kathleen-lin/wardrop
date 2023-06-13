@@ -9,13 +9,16 @@ import { OOTDfiles } from '../model';
 })
 export class DriveComponent implements OnInit{
 
+  user!: string
   ootdImages: string[] = []
   ootdFolderId!: string
 
   constructor (private itmSvc: ItemService) {}
   
   ngOnInit(): void {
-    this.itmSvc.getOOTDdrive()
+    // @ts-ignore
+    this.user = localStorage.getItem("user")
+    this.itmSvc.getOOTDdrive(this.user)
       .then((result) => {
         const ootds = result as OOTDfiles;
         this.ootdImages = ootds.files;

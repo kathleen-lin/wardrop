@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
   }
 
   callGDrive() {
-    this.itmSvc.Gdrive()
+    this.itmSvc.Gdrive(this.user)
       .then((result) => {
         console.log(result);
         const uri = result as nextUrl;
@@ -44,7 +44,7 @@ export class AppComponent implements OnInit {
   
         if (this.nextUrl == "drive/signin"){
 
-          const nextPage = "http://localhost:8080/api/" + this.nextUrl;
+          const nextPage = "http://localhost:8080/api/" + this.nextUrl + "?user=" + this.user;
         
           this.itmSvc.getAuthUrl(nextPage)
             .then((url) => {

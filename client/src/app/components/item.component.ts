@@ -42,7 +42,7 @@ export class ItemComponent implements OnInit {
     this.itmSvc.increaseTimeWorn(this.selectedItem.itemId)
       .then((r) => console.log(r))
       .catch((err) => console.log(err))
-    location.reload()
+    this.ngOnInit()
   }
 
   remove() {

@@ -76,15 +76,19 @@ export class ItemService {
     return firstValueFrom (this.httpClient.post('http://localhost:8080/api/upload/details', fd))
   }
 
-  Gdrive() {
-    return firstValueFrom(this.httpClient.get('http://localhost:8080/api/drive'))
+  Gdrive(user: string) {
+    const queryParams = new HttpParams()
+                        .set("user", user)
+    return firstValueFrom(this.httpClient.get('http://localhost:8080/api/drive', { params: queryParams }))
   }
 
   getAuthUrl(url: string) {
     return firstValueFrom(this.httpClient.get(url))
   }
 
-  getOOTDdrive() {
-    return firstValueFrom(this.httpClient.get('http://localhost:8080/api/drive/home'))
+  getOOTDdrive(user:string) {
+    const queryParams = new HttpParams()
+    .set("user", user)
+    return firstValueFrom(this.httpClient.get('http://localhost:8080/api/drive/home', { params: queryParams}))
   }
 }

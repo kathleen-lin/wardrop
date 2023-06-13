@@ -36,6 +36,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import com.google.api.services.drive.model.User;
 
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
@@ -64,6 +65,8 @@ public class ItemController {
 
     @Autowired
     private GoogleDriveAuthService authSvc;
+
+    private String gDriveUser;
   
   
     @CrossOrigin(origins = "*")
@@ -241,11 +244,13 @@ public class ItemController {
 
     @CrossOrigin(origins = "*")
     @GetMapping("/drive")
-    public ResponseEntity<String> authenticate() throws IOException {
+    public ResponseEntity<String> authenticate(@RequestParam("user")String user) throws IOException {
+        
+        this.gDriveUser = user;
         
         boolean isUserAuthenticated = false;
         GoogleAuthorizationCodeFlow flow = authSvc.getFlow();
-        Credential cred = flow.loadCredential("user3");
+        Credential cred = flow.loadCredential(user);
 
         if (cred!=null) {
             boolean tokenValid = cred.refreshToken();
@@ -272,7 +277,8 @@ public class ItemController {
     public ResponseEntity<String> doSignin() throws IOException {
 
         GoogleAuthorizationCodeRequestUrl url = authSvc.getFlow().newAuthorizationUrl();
-        String redirectUrl = url.setRedirectUri("http://localhost:8080/api/oauth").setAccessType("offline").build();
+        String redirectUrl = url.setRedirectUri("http://localhost:8080/api/oauth")
+        .setAccessType("offline").build();
             JsonObject respOb = Json.createObjectBuilder()
                                 .add("redirectUrl", redirectUrl)
                                 .build();
@@ -286,7 +292,7 @@ public class ItemController {
     public ResponseEntity<String> saveAuthCode(@RequestParam("code") String code) throws IOException {
         System.out.println(code);
         if (code != null){
-            saveToken(code);
+            saveToken(code, this.gDriveUser);
             JsonObject respOb = Json.createObjectBuilder()
                                 .add("message", "you can now close the window")
                                 .build();
@@ -299,21 +305,21 @@ public class ItemController {
         return new ResponseEntity<String>(respOb.toString(), HttpStatus.BAD_REQUEST);
     }
 
-    private void saveToken(String code) throws IOException{
+    private void saveToken(String code, String user) throws IOException{
         GoogleTokenResponse response = authSvc.getFlow().newTokenRequest(code).setRedirectUri("http://localhost:8080/api/oauth").execute();
         
-        authSvc.getFlow().createAndStoreCredential(response, "user3");        
+        authSvc.getFlow().createAndStoreCredential(response, user);        
 
     }
     
     @CrossOrigin(origins = "*")
     @GetMapping("/drive/home")
-    public ResponseEntity<String> listFilesInFolder() throws IOException, GeneralSecurityException {
+    public ResponseEntity<String> listFilesInFolder(@RequestParam("user") String user) throws IOException, GeneralSecurityException {
         
         // create a drive
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
-        Credential credential = authSvc.getFlow().loadCredential("user3");
+        Credential credential = authSvc.getFlow().loadCredential(user);
         JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
 
 
@@ -322,7 +328,7 @@ public class ItemController {
                 .build();
 
         // folderId to be returned
-        String folderId = createFolderIfNotExists("OOTD");
+        String folderId = createFolderIfNotExists("OOTD", user);
 
        // search files in the folder
         String query = "'" + folderId + "' in parents";
@@ -383,13 +389,13 @@ public class ItemController {
     //     return files.isEmpty() ? null : files.get(0).getId();
     // }
     @CrossOrigin(origins = "*")
-    @PostMapping(path="/drive/testupload/{parentFolderId}", consumes= MediaType.MULTIPART_FORM_DATA_VALUE)
-    public File uploadFile(@PathVariable String parentFolderId, @RequestBody MultipartFile image) throws IOException, GeneralSecurityException {
+    @PostMapping(path="/drive/testupload/{parentFolderId}/{user}", consumes= MediaType.MULTIPART_FORM_DATA_VALUE)
+    public File uploadFile(@PathVariable String parentFolderId, @PathVariable String user, @RequestBody MultipartFile image) throws IOException, GeneralSecurityException {
         System.out.println(parentFolderId);
 
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
-        Credential credential = authSvc.getFlow().loadCredential("user3");
+        Credential credential = authSvc.getFlow().loadCredential(user);
         JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
 
 
@@ -424,12 +430,12 @@ public class ItemController {
     }
 
     
-    private String createFolderIfNotExists(String folderName) throws IOException, GeneralSecurityException {
+    private String createFolderIfNotExists(String folderName, String user) throws IOException, GeneralSecurityException {
 
         // create drive
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
-        Credential credential = authSvc.getFlow().loadCredential("user3");
+        Credential credential = authSvc.getFlow().loadCredential(user);
         JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
 
 
