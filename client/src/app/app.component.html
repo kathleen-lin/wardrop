@@ -1,23 +1,40 @@
-<nav>
-  <a [routerLink]="['/']"><img src="../assets/wardrop_logo.png" alt="Logo"></a>
-  <a [routerLink]="['/']">Category</a> 
-  <button [routerLink]="['/add']">Add new clothes</button>
-  <button (click)="callGDrive()">Add OOTD</button>
-  <div class="userForm">
-    <form [formGroup]="userForm" (ngSubmit)="saveUser()">
-      <label>User: </label>
-      <input formControlName="userName">
-      <button type="submit"> save</button>
-    </form>
-    
-  </div>
+<nav class="navbar nav-bar-expand-lg">
+  <div class="container">
+    <ul class="nav justify-content-center">
+      <li>
+    <a class="navbar-brand" href="#">
+      <img src="../assets/wardrop_logo.png" width="80px" >
+    </a>
+  </li>
+        <li>
+          <a class = "nav-link" [routerLink]="['/']">Category</a> 
+        </li>
+
+        <li>
+          <a class = "nav-link" [routerLink]="['/add']">Add new clothes</a> 
+        </li>
+
+        <li>
+          <button mat-raised-button color="accent" class = "nav-link" (click)="callGDrive()">OOTD Gallery</button>
+        </li>
+    </ul>
+          <div class="d-flex">
+            <form [formGroup]="userForm" (ngSubmit)="saveUser()">
+              <label>User: </label>
+              <input class="formInput" formControlName="userName">
+
+              <button type="submit" mat-flat-button color="accent">Save</button>
+            </form>
+            
+          </div>
+      </div>
   
 </nav>
 <br>
-<div>
-  <i> Current user: {{ user }} </i>
-  
+<div class ="container">
+  <i> Current user: <span class="bold">{{ user }}</span> </i>
 </div>
+<br>
 <div class="container">
     <router-outlet></router-outlet>
 </div>

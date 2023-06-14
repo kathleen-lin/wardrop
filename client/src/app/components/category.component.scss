@@ -1,0 +1,24 @@
+@import '../app.component.scss';
+
+
+.parent-float { 
+    width: 100%; 
+    min-height: 40px
+
+} 
+.child-float { 
+    float: left; 
+    width: 50%; 
+    min-height: 40px
+} 
+
+.mat-icon {
+    
+    color: map-get($client-primary,100 );
+    display: inline-block;
+    float: right;
+    margin-right: 50px;
+    height: 30px;
+    width: 30px;
+    overflow: hidden;
+}

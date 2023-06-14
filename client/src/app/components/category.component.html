@@ -1,4 +1,14 @@
-<h3> {{ categoryName | titlecase }} </h3>
+<div class="container"> 
+    <div class = "parent-float">
+        <div class = "child-float">
+            <h3> {{ categoryName | titlecase }} </h3>
+        </div>
+        <div class ="child-float">
+            <mat-icon class="backIcon" routerLink="['/home']"> arrow_circle_left </mat-icon>
+        </div>
+    </div>
+    
+</div>
 
 <!-- to have a list of items in that category 
 example query - select * from items where category = top (categoryName)

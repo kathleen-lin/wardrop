@@ -19,6 +19,9 @@ import { AddItemImageComponent } from './components/add-item-image.component';
 import { AnalyseComponent } from './components/analyse.component';
 import { DriveComponent } from './components/drive.component';
 import { AddOOTDComponent } from './components/add-ootd.component';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+import {MatIconModule} from '@angular/material/icon';
 
 
 @NgModule({
@@ -41,7 +44,10 @@ import { AddOOTDComponent } from './components/add-ootd.component';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatSlideToggleModule,
-    MatDialogModule
+    MatDialogModule,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule
     // BrowserAnimationsModule,
   ],
   providers: [],

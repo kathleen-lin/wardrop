@@ -1,0 +1,19 @@
+@import '../custom-theme.scss';
+
+nav {
+    background-color: map-get($client-primary, 100);
+}              
+
+.nav {
+  align-items: center;
+}
+
+.formInput {
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
+.bold {
+  font-weight: bold;
+}
+     
