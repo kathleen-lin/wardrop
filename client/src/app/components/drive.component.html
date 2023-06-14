@@ -5,5 +5,12 @@
         <img [src]="getDriveImageURL(imageId)" alt="OOTD Image" width="200px">
       </div>
     </div>
+
+    <div *ngIf="succesfullyLoaded">
+      <button (click) = "navigateToUploadOOTD()">
+        add new ootd
+      </button>
+    </div>
+      
   </div>
   

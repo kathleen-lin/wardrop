@@ -389,8 +389,8 @@ public class ItemController {
     //     return files.isEmpty() ? null : files.get(0).getId();
     // }
     @CrossOrigin(origins = "*")
-    @PostMapping(path="/drive/testupload/{parentFolderId}/{user}", consumes= MediaType.MULTIPART_FORM_DATA_VALUE)
-    public File uploadFile(@PathVariable String parentFolderId, @PathVariable String user, @RequestBody MultipartFile image) throws IOException, GeneralSecurityException {
+    @PostMapping(path="/drive/upload", consumes= MediaType.MULTIPART_FORM_DATA_VALUE)
+    public File uploadFile(@RequestPart String parentFolderId, @RequestPart String user, @RequestPart MultipartFile image) throws IOException, GeneralSecurityException {
         System.out.println(parentFolderId);
 
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();

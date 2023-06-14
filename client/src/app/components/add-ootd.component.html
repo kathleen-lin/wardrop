@@ -1,0 +1,16 @@
+<form enctype="multipart/form-data" (ngSubmit)="sendImage()" method="post" [formGroup] ="imageForm">
+
+    <table>
+        <tr>
+            <td><label for="photo">Image</label></td>
+            <td><input type="file" accept="image/png, image/jpeg" formControlName="photo" #photo></td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><button type="submit">Next</button></td>
+        </tr>
+    </table>
+    
+ 
+</form>

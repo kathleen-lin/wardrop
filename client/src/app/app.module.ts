@@ -18,6 +18,7 @@ import { RemovalComponent } from './components/removal.component';
 import { AddItemImageComponent } from './components/add-item-image.component';
 import { AnalyseComponent } from './components/analyse.component';
 import { DriveComponent } from './components/drive.component';
+import { AddOOTDComponent } from './components/add-ootd.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { DriveComponent } from './components/drive.component';
     RemovalComponent,
     AddItemImageComponent,
     AnalyseComponent,
-    DriveComponent
+    DriveComponent,
+    AddOOTDComponent
   ],
   imports: [
     BrowserModule,

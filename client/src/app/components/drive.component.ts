@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ItemService } from '../item.service';
 import { OOTDfiles } from '../model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-drive',
@@ -12,8 +13,8 @@ export class DriveComponent implements OnInit{
   user!: string
   ootdImages: string[] = []
   ootdFolderId!: string
-
-  constructor (private itmSvc: ItemService) {}
+  succesfullyLoaded: boolean = false;
+  constructor (private itmSvc: ItemService, private router: Router) {}
   
   ngOnInit(): void {
     // @ts-ignore
@@ -25,12 +26,18 @@ export class DriveComponent implements OnInit{
         this.ootdFolderId = ootds.folderId;
         console.log(this.ootdFolderId);
         console.log(this.ootdImages);
+        this.succesfullyLoaded = true;
+
       })
       .catch((err) => console.log(err))
   }
 
   getDriveImageURL(imageId: string): string {
     return `https://drive.google.com/uc?id=${imageId}`;
+  }
+
+  navigateToUploadOOTD(){
+    this.router.navigate(['/drive/add', this.ootdFolderId])
   }
   
 }

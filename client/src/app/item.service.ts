@@ -91,4 +91,9 @@ export class ItemService {
     .set("user", user)
     return firstValueFrom(this.httpClient.get('http://localhost:8080/api/drive/home', { params: queryParams}))
   }
+
+  uploadOOTD(fd: FormData){
+    return firstValueFrom (this.httpClient.post('http://localhost:8080/api/drive/upload', fd))
+
+  }
 }
