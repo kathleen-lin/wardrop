@@ -5,3 +5,5 @@ body { margin: 0; font-family: "space mono", "Helvetica Neue", sans-serif; }
 text { color: black }
 a { color: black}
 body { background-color: #e6f4f7}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

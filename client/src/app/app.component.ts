@@ -7,7 +7,7 @@ import { nextUrl, redirectUrl } from './model';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
   
@@ -44,7 +44,7 @@ export class AppComponent implements OnInit {
   
         if (this.nextUrl == "drive/signin"){
 
-          const nextPage = "http://localhost:8080/api/" + this.nextUrl + "?user=" + this.user;
+          const nextPage = "https://instinctive-celery-production.up.railway.app/api/" + this.nextUrl + "?user=" + this.user;
         
           this.itmSvc.getAuthUrl(nextPage)
             .then((url) => {

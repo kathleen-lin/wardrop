@@ -2,10 +2,10 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom, lastValueFrom } from 'rxjs';
 
-const get_url = "http://localhost:8080/api/item"
+const get_url = "https://instinctive-celery-production.up.railway.app/api/item"
 // http://localhost:8080/api?category=top
-const get_list_category_url = "http://localhost:8080/api"
-const get_analysis_url = "http:localhost8080/api/analyse"
+const get_list_category_url = "https://instinctive-celery-production.up.railway.app/api"
+const get_analysis_url = "https://instinctive-celery-production.up.railway.app/api/analyse"
 
 @Injectable({
   providedIn: 'root'
@@ -59,7 +59,7 @@ export class ItemService {
   uploadImage(fd: FormData) {
 
 
-    return firstValueFrom(this.httpClient.post('http://localhost:8080/api/uploadImage', fd))
+    return firstValueFrom(this.httpClient.post('https://instinctive-celery-production.up.railway.app/api/uploadImage', fd))
        
   }
 
@@ -67,19 +67,19 @@ export class ItemService {
     const queryParams = new HttpParams()
                         .set("i", fileName)
   
-    return firstValueFrom(this.httpClient.get('http://localhost:8080/api/analyse', { params: queryParams }))
+    return firstValueFrom(this.httpClient.get('https://instinctive-celery-production.up.railway.app/api/analyse', { params: queryParams }))
     
   }
 
   postItem (fd: FormData) {
     
-    return firstValueFrom (this.httpClient.post('http://localhost:8080/api/upload/details', fd))
+    return firstValueFrom (this.httpClient.post('https://instinctive-celery-production.up.railway.app/api/upload/details', fd))
   }
 
   Gdrive(user: string) {
     const queryParams = new HttpParams()
                         .set("user", user)
-    return firstValueFrom(this.httpClient.get('http://localhost:8080/api/drive', { params: queryParams }))
+    return firstValueFrom(this.httpClient.get('https://instinctive-celery-production.up.railway.app/api/drive', { params: queryParams }))
   }
 
   getAuthUrl(url: string) {
@@ -89,11 +89,11 @@ export class ItemService {
   getOOTDdrive(user:string) {
     const queryParams = new HttpParams()
     .set("user", user)
-    return firstValueFrom(this.httpClient.get('http://localhost:8080/api/drive/home', { params: queryParams}))
+    return firstValueFrom(this.httpClient.get('https://instinctive-celery-production.up.railway.app/api/drive/home', { params: queryParams}))
   }
 
   uploadOOTD(fd: FormData){
-    return firstValueFrom (this.httpClient.post('http://localhost:8080/api/drive/upload', fd))
+    return firstValueFrom (this.httpClient.post('https://instinctive-celery-production.up.railway.app/api/drive/upload', fd))
 
   }
 }

@@ -15,3 +15,8 @@ nav {
   font-weight: bold;
 }
      
+
+.custom-flat {
+  background-color: #84c5d7; /* Set your desired background color */
+  color: white;
+}
