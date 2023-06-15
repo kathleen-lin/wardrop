@@ -13,7 +13,23 @@
 <!-- to have a list of items in that category 
 example query - select * from items where category = top (categoryName)
 -->
+<div class="item-container">
+    <div class="row">
+      <div class="col" *ngFor="let i of items">
+        <div class="individualItem">
+          <mat-card [routerLink]="['/item', i.itemId]">
+            <img mat-card-image src="{{ i.photoUrl }}">
+            <h3>{{ i.description }}</h3>
+            <i>worn {{ i.timeWorn }} time(s)</i>
+          </mat-card>
+          <button (click)="increaseWorn(i)">I wore this today</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 
+<!-- 
 <div *ngFor="let i of items">
     <div [routerLink]="['/item', i.itemId]">
         <img src = "{{ i.photoUrl }}" width = 200px >
@@ -22,8 +38,7 @@ example query - select * from items where category = top (categoryName)
         <br>
     
     </div>
-    <button (click)="increaseWorn(i)">I wore this today</button>
         <p>---------</p>
-</div>
+</div> -->
 
 

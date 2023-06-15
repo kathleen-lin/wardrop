@@ -23,8 +23,8 @@ public class appConfig {
 
 	// @Value("${spaces.endpoint.url}")
 	// private String spacesEndpointUrl;
-	@Value("${mongo.url}")
-    private String mongoUrl;
+	// @Value("${mongo.url}")
+    // private String mongoUrl;
 
     @Bean 
 	public AmazonS3 createS3Client() {
@@ -39,11 +39,11 @@ public class appConfig {
 
 	
 
-    @Bean
-    public MongoTemplate createMongoTemplate() {
-        // Create a MongoClient
-        MongoClient client = MongoClients.create(mongoUrl);
-        return new MongoTemplate(client, "local");
-    }
+    // @Bean
+    // public MongoTemplate createMongoTemplate() {
+    //     // Create a MongoClient
+    //     MongoClient client = MongoClients.create(mongoUrl);
+    //     return new MongoTemplate(client, "local");
+    // }
     
 }

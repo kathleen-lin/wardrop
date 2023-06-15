@@ -1,8 +1,8 @@
 <div class="container">
-    <div class="row">
-      <div class="col">
-        <mat-card class="category" [routerLink]="['/category', 'top']">
-            <img mat-card-image src="../../assets/top.png" width = "300px">
+    <div class="row align-items-center categoryrow">
+      <div class="col category">
+        <mat-card [routerLink]="['/category', 'top']" >
+            <img mat-card-image src="../../assets/top.png">
             
             <button mat-button> TOP</button>
     
@@ -10,9 +10,9 @@
     
         
       </div>
-      <div class="col">
-        <mat-card class="category" [routerLink]="['/category', 'bottom']">
-            <img mat-card-image src="../../assets/bottom.png" width = "300px">
+      <div class="col category">
+        <mat-card [routerLink]="['/category', 'bottom']">
+            <img mat-card-image src="../../assets/bottom.png" >
             
             <button mat-button> BOTTOM</button>
     
@@ -20,9 +20,9 @@
     
        
       </div>
-      <div class="col">
-        <mat-card class="category" [routerLink]="['/category', 'one-piece']">
-            <img mat-card-image src="../../assets/one-piece.png" width = "300px">
+      <div class="col category">
+        <mat-card [routerLink]="['/category', 'one-piece']">
+            <img mat-card-image src="../../assets/one-piece.png">
             
             <button mat-button> ONE-PIECE</button>
         </mat-card>    
@@ -32,36 +32,37 @@
   </div>
 
 <br>
-  
-<div class="container">
-    <div class="row">
-      <div class="col">
-        <mat-card class="category" [routerLink]="['/category', 'outerwear']">
-            <img mat-card-image src="../../assets/outerwear.png" width = "300px">
-            
-            <button mat-button> OUTERWEAR</button>
-    
-        </mat-card>
-    
+
+<div class="row align-items-center categoryrow">
+  <div class="col category">
+    <mat-card [routerLink]="['/category', 'outerwear']" >
+        <img mat-card-image src="../../assets/outerwear.png">
         
-      </div>
-      <div class="col">
-        <mat-card class="category" [routerLink]="['/category', 'shoes']">
-            <img mat-card-image src="../../assets/shoes.png" width = "300px">
-            
-            <button mat-button> SHOES</button>
+        <button mat-button> OUTERWEAR</button>
+
+    </mat-card>
+
     
-        </mat-card>
-    
-       
-      </div>
-      <div class="col">
-        <mat-card class="category" [routerLink]="['/category', 'accesories']">
-            <img mat-card-image src="../../assets/accessories.png" width = "300px">
-            
-            <button mat-button> ACCESSORIES</button>
-        </mat-card>    
-    
-      </div>
-    </div>
   </div>
+  <div class="col category">
+    <mat-card [routerLink]="['/category', 'shoes']">
+        <img mat-card-image src="../../assets/shoes.png" >
+        
+        <button mat-button> SHOES</button>
+
+    </mat-card>
+
+   
+  </div>
+  <div class="col category">
+    <mat-card [routerLink]="['/category', 'accesories']">
+        <img mat-card-image src="../../assets/accessories.png">
+        
+        <button mat-button> ACCESSORIES</button>
+    </mat-card>    
+
+  </div>
+</div>
+
+
+ 

@@ -1,4 +1,8 @@
+.categoryrow {
+  position: relative;
+}
+
 .category {
-  max-width: 300px;
-  background: #F0E4E3;
+  /* background: #F0E4E3; */
+  max-width: calc(33.33% - 20px);  
 }
