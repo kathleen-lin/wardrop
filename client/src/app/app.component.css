@@ -1,7 +1,5 @@
-@import '../custom-theme.scss';
-
 nav {
-    background-color: map-get($client-primary, 100);
+    background-color: #e7c0B4;
 }              
 
 .nav {
