@@ -277,7 +277,7 @@ public class ItemController {
     public ResponseEntity<String> doSignin() throws IOException {
 
         GoogleAuthorizationCodeRequestUrl url = authSvc.getFlow().newAuthorizationUrl();
-        String redirectUrl = url.setRedirectUri("http://localhost:8080/api/oauth")
+        String redirectUrl = url.setRedirectUri("https://instinctive-celery-production.up.railway.app/api/oauth")
         .setAccessType("offline").build();
             JsonObject respOb = Json.createObjectBuilder()
                                 .add("redirectUrl", redirectUrl)
@@ -306,7 +306,7 @@ public class ItemController {
     }
 
     private void saveToken(String code, String user) throws IOException{
-        GoogleTokenResponse response = authSvc.getFlow().newTokenRequest(code).setRedirectUri("http://localhost:8080/api/oauth").execute();
+        GoogleTokenResponse response = authSvc.getFlow().newTokenRequest(code).setRedirectUri("https://instinctive-celery-production.up.railway.app/api/oauth").execute();
         
         authSvc.getFlow().createAndStoreCredential(response, user);        
 

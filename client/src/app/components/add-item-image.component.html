@@ -1,17 +1,28 @@
 <!-- Form to post image -->
-<form enctype="multipart/form-data" (ngSubmit)="sendImage()" method="post" [formGroup] ="imageForm">
 
-    <table>
-        <tr>
-            <td><label for="photo">Image</label></td>
-            <td><input type="file" accept="image/png, image/jpeg" formControlName="photo" #photo></td>
-        </tr>
+<div class="container">
+    <div class="form-style-3">
+        <form enctype="multipart/form-data" (ngSubmit)="sendImage()" method="post" [formGroup] ="imageForm">
+        <fieldset>
+        <label><span>Image <span class="required">*</span></span>
+        <br>    
+        <input type="file" accept="image/png, image/jpeg" formControlName="photo" #photo></label>
+        <br>
+        <label><button mat-flat-button color="primary" type="submit">Next</button></label>
+        </fieldset>
+        </form>
+        </div>
+    <!-- <div class="image-form">
+        <form >
+        <mat-form-field>
+            <label>Image</label>
+            <input type="file" accept="image/png, image/jpeg" formControlName="photo" #photo>
+          </mat-form-field>
+          <br>
+          <button type="submit">Next</button>
+                
+        </form>
 
-        <tr>
-            <td></td>
-            <td><button type="submit">Next</button></td>
-        </tr>
-    </table>
-    
- 
-</form>
+    </div> -->
+   
+</div>

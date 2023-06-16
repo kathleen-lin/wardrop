@@ -16,7 +16,7 @@ export class CategoryComponent implements OnInit {
 
   items!: Item[]
 
-  user!: string
+  user!: string|null
 
   constructor(private httpClient: HttpClient, private activatedRoute: ActivatedRoute, private itmSvc: ItemService) {}
 
@@ -32,16 +32,19 @@ export class CategoryComponent implements OnInit {
         console.log(">>>" + this.categoryName);        
       }
     );
-    // @ts-ignore
     this.user = localStorage.getItem("user")
-    console.log("user: " + this.user);
+    if (this.user != null) {
+
+    // console.log("user: " + this.user);
     // query for list of items with category, fetch from: http://localhost:8080/api?category=top?user=celine
+    // @ts-ignore
     this.itmSvc.getItemListByCategory(this.categoryName, this.user)
       .then((r) => {
         this.items = r
         console.log(this.items)
       })
       .catch((err) => console.log(err))
+    }
   }
 
   increaseWorn(item: Item) {
