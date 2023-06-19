@@ -11,6 +11,8 @@ import { PhotoService } from '../photo.service';
 })
 export class AddItemImageComponent {
 
+  user!: string|null
+
   imageForm! :FormGroup
 
   @ViewChild('photo')
@@ -19,7 +21,7 @@ export class AddItemImageComponent {
   constructor(private fb: FormBuilder, private itmSvc: ItemService, private photoSvc: PhotoService, private router: Router) {}
 
   ngOnInit(): void {
-
+    this.user = localStorage.getItem("user")
     this.imageForm = this.fb.group({
       photo: this.fb.control(''),
     })

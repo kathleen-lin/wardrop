@@ -23,6 +23,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { LandingComponent } from './components/landing.component';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     AddItemImageComponent,
     AnalyseComponent,
     DriveComponent,
-    AddOOTDComponent
+    AddOOTDComponent,
+    LandingComponent
   ],
   imports: [
     BrowserModule,

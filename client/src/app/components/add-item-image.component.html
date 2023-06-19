@@ -1,28 +1,35 @@
 <!-- Form to post image -->
 
-<div class="container">
-    <div class="form-style-3">
-        <form enctype="multipart/form-data" (ngSubmit)="sendImage()" method="post" [formGroup] ="imageForm">
-        <fieldset>
-        <label><span>Image <span class="required">*</span></span>
-        <br>    
-        <input type="file" accept="image/png, image/jpeg" formControlName="photo" #photo></label>
-        <br>
-        <label><button mat-flat-button color="primary" type="submit">Next</button></label>
-        </fieldset>
-        </form>
-        </div>
-    <!-- <div class="image-form">
-        <form >
-        <mat-form-field>
-            <label>Image</label>
-            <input type="file" accept="image/png, image/jpeg" formControlName="photo" #photo>
-          </mat-form-field>
-          <br>
-          <button type="submit">Next</button>
-                
-        </form>
+<div *ngIf="user == null else displayForm">
+    
+    <p> please enter user name ...</p>
+  </div>
 
-    </div> -->
-   
-</div>
+ <ng-template #displayForm> 
+    <div class="form-container">
+        <div class="form-style-3">
+            <form enctype="multipart/form-data" (ngSubmit)="sendImage()" method="post" [formGroup] ="imageForm">
+            <fieldset>
+            <label><span>Image <span class="required">*</span></span>
+            <br>    
+            <input type="file" accept="image/png, image/jpeg" formControlName="photo" #photo></label>
+            <br>
+            <label><button mat-flat-button color="primary" type="submit">Next</button></label>
+            </fieldset>
+            </form>
+            </div>
+        <!-- <div class="image-form">
+            <form >
+            <mat-form-field>
+                <label>Image</label>
+                <input type="file" accept="image/png, image/jpeg" formControlName="photo" #photo>
+            </mat-form-field>
+            <br>
+            <button type="submit">Next</button>
+                    
+            </form>
+
+        </div> -->
+    
+    </div>
+</ng-template>

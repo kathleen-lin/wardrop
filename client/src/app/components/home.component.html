@@ -1,3 +1,5 @@
+<div *ngIf="user != null, else askForUser">
+
 <div class="container">
     <div class="row align-items-center categoryrow">
       <div class="col category">
@@ -66,3 +68,10 @@
 
 
  
+</div>
+
+<ng-template #askForUser>
+
+  <p> please enter user name ...</p>
+
+</ng-template>

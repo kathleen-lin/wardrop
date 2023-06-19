@@ -98,8 +98,13 @@ public class ItemController {
 
             if (optListItms.isEmpty()){
             
-                return new ResponseEntity<String>("There is nothing in this category yet", HttpStatus.OK);
+                JsonArrayBuilder builder = Json.createArrayBuilder();
+                JsonArray jArray = builder.build();
+            
+                
+                return new ResponseEntity<String>(jArray.toString(), HttpStatus.OK);
             }
+
             
             List<Item> itms = optListItms.get();
 
@@ -133,11 +138,17 @@ public class ItemController {
         Date dPurchaseOn = Date.valueOf(purchaseOn);
         int iTimeWorn = Integer.parseInt(timeWorn);
 
-        
+        Boolean userExisit = itemRepo.checkIfUserExist(userName);
 
         try {
+            
             itemRepo.upload(photoUrl, description, fPrice, dPurchaseOn, iTimeWorn, category, userName);
 
+            if (!userExisit) {
+                // create user
+                itemRepo.insertUser(userName);
+
+            }
         } catch (Exception e) {
 
             JsonObject jo = Json.createObjectBuilder()
@@ -465,7 +476,40 @@ public class ItemController {
         return createdFolder.getId();
     }
 
+    @CrossOrigin(origins = "*")
+    @GetMapping("getTop3")
+    public ResponseEntity<String> getTop3(@RequestParam("user") String user){
 
+        try {
+            Optional<List<Item>> optListItms = itemRepo.getTop3Items(user);
+
+            if (optListItms.isEmpty()){
+            
+                JsonArrayBuilder builder = Json.createArrayBuilder();
+                JsonArray jArray = builder.build();
+            
+                
+                return new ResponseEntity<String>(jArray.toString(), HttpStatus.OK);
+            }
+
+            
+            List<Item> itms = optListItms.get();
+
+            JsonArrayBuilder builder = Json.createArrayBuilder();
+            for(Item i: itms) {
+                builder.add(i.toJson());
+            }
+            JsonArray jArray = builder.build();
+
+            return new ResponseEntity<String>(jArray.toString(), HttpStatus.OK);
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return new ResponseEntity<String>("something is wrong", HttpStatus.BAD_REQUEST);
+        }
+
+
+    }
 
 
     

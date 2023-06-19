@@ -1,4 +1,9 @@
+
+
+<div class="form-container">
 <img [src]="photoUrl" width = "200px">
+
+<div class = "form-style-3">
 <form enctype="multipart/form-data" (ngSubmit)="processForm()" method="post" [formGroup] ="addForm">
     
     <label >Description: </label>
@@ -26,3 +31,6 @@
 <br>
     <button type="submit">Save</button>
 </form>
+</div>
+
+</div>

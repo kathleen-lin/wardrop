@@ -1,0 +1,25 @@
+
+<div *ngIf="user != null else welcome">
+    <p> Hi {{ user }}, these are your top worn pieces: </p>
+
+    <div class="item-container">
+        <div class="row">
+          <div class="col" *ngFor="let i of topitems">
+            <div class="individualItem">
+              <mat-card [routerLink]="['/item', i.itemId]">
+                <img mat-card-image src="{{ i.photoUrl }}">
+                <h3>{{ i.description }}</h3>
+                <i>worn {{ i.timeWorn }} time(s)</i>
+              </mat-card>
+              <!-- <button (click)="increaseWorn(i)">I wore this today</button> -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+</div>
+
+<ng-template #welcome>
+    <iframe src="https://giphy.com/embed/dZXzmKGKNiJtDxuwGg" width="480" height="360" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/originals-dZXzmKGKNiJtDxuwGg">via GIPHY</a></p>
+</ng-template>

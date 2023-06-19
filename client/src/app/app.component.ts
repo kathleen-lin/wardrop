@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
     console.log(this.user)
     // how can i share this info with other components?
     localStorage.setItem("user", this.user)
-    this.router.navigate(["/home"])
+    this.router.navigate(["/category"])
   }
 
   callGDrive() {

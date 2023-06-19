@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.sql.RowSet;
+
 import org.bson.Document;
 
 // import javax.sql.DataSource;
@@ -42,6 +44,9 @@ public class itemRepo {
 
     private String SQL_INCREASE_TIME_WORN = "UPDATE item SET time_worn = time_worn + 1 WHERE item_id = ?";
     
+    
+    private String SQL_GET_TOP3 = "select * from item where user_name = ? order by time_worn desc limit 3";
+
     private String DELETE_BY_ID_SQL = "DELETE from item where item_id = ?";
 
     // create
@@ -87,7 +92,7 @@ public class itemRepo {
                 it.setItemId(rs.getInt("item_id"));
                 it.setPhotoUrl(rs.getString("photo_url"));
                 it.setDescription(rs.getString("description"));
-                System.out.println(it.getDescription());
+                // System.out.println(it.getDescription());
                 it.setPrice(rs.getFloat("price"));
                 it.setDatePurchased(rs.getDate("date_purchased"));
                 it.setTimeWorn(rs.getInt("time_worn"));
@@ -97,7 +102,9 @@ public class itemRepo {
                 itemsInCategory.add(it);
             }
 
-            if (itemsInCategory.isEmpty()) {
+            System.out.println(itemsInCategory.size());
+
+            if (itemsInCategory.size() == 0) {
                 return Optional.empty();
                 
             }
@@ -138,6 +145,53 @@ public class itemRepo {
         toAdd.append("reason", reason);
 
         mongo.insert(toAdd, MONGO_COLLECTION);
+
+    }
+
+    public Optional<List<Item>> getTop3Items (String user) {
+        List<Item> topitems = new LinkedList<Item>();
+
+        try {
+        final SqlRowSet rs = template.queryForRowSet( SQL_GET_TOP3 ,user);
+
+            while (rs.next()) {
+                Item it = new Item();
+                it.setItemId(rs.getInt("item_id"));
+                it.setPhotoUrl(rs.getString("photo_url"));
+                it.setDescription(rs.getString("description"));
+                it.setPrice(rs.getFloat("price"));
+                it.setDatePurchased(rs.getDate("date_purchased"));
+                it.setTimeWorn(rs.getInt("time_worn"));
+                it.setCostPerWear(rs.getFloat("cost_per_wear"));
+                it.setCategory(rs.getString("category"));
+
+                topitems.add(it);
+            }
+
+            System.out.println(topitems.size());
+
+            if (topitems.size() == 0) {
+                return Optional.empty();
+                
+            }
+            return Optional.of(topitems);
+        
+    } catch (Exception e) {
+        e.printStackTrace();
+        return Optional.empty();
+    }
+
+    }
+
+    public Boolean checkIfUserExist (String user) {
+        final SqlRowSet rs = template.queryForRowSet("select * from user where user_name =?", user);
+        return rs.first();
+
+
+    }
+
+    public int insertUser (String user) {
+        return template.update("insert into user (user_name) value (?)", user);
 
     }
 

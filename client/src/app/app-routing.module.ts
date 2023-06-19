@@ -8,9 +8,11 @@ import { AddItemImageComponent } from './components/add-item-image.component';
 import { AnalyseComponent } from './components/analyse.component';
 import { DriveComponent } from './components/drive.component';
 import { AddOOTDComponent } from './components/add-ootd.component';
+import { LandingComponent } from './components/landing.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', component: LandingComponent },
+  { path: 'category', component: HomeComponent },
   { path: 'category/:name', component: CategoryComponent },
   { path: 'item/:itemId', component: ItemComponent },
   { path: 'add', component: AddItemImageComponent },

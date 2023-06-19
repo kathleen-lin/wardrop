@@ -18,6 +18,8 @@ export class CategoryComponent implements OnInit {
 
   user!: string|null
 
+  isListEmpty: boolean = false
+
   constructor(private httpClient: HttpClient, private activatedRoute: ActivatedRoute, private itmSvc: ItemService) {}
 
   ngOnInit(): void {
@@ -41,7 +43,12 @@ export class CategoryComponent implements OnInit {
     this.itmSvc.getItemListByCategory(this.categoryName, this.user)
       .then((r) => {
         this.items = r
+        if (this.items.length == 0) {
+          this.isListEmpty = true
+          console.log("nothing in category")
+        }
         console.log(this.items)
+
       })
       .catch((err) => console.log(err))
     }
