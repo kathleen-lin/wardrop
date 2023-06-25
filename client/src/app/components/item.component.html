@@ -3,13 +3,42 @@
 <p>{{ selectedItem.datePurchased }}</p>
 <p>{{ selectedItem.timeWorn }}</p> -->
 
-<div *ngIf="selectedItem">
-    <button (click)="remove()">Remove from wardrobe</button>
-    <br>
+<div>
+  <mat-icon class="backIcon" (click) = "back()"> arrow_circle_left </mat-icon>
+</div>
+
+<div *ngIf="selectedItem && user !=null else message" class = "itemInfo">
+
     <img src = "{{ selectedItem.photoUrl }}" width = 200px>
-    <p>{{ selectedItem.description }}</p>
-    <p>{{ selectedItem.datePurchased }}</p>
-    <p>{{ selectedItem.timeWorn }}</p> 
-    <p>{{ selectedItem.costPerWear }}</p> 
-    <button (click)="increaseWorn()"> I wear this today!</button>
+    <table>
+      <tr>
+        <td> Description: </td>
+        <td>{{ selectedItem.description }}</td>
+      </tr>
+      <tr>
+        <td> Purchased on: </td>
+        <td>{{ selectedItem.datePurchased }}</td>
+      </tr>
+      <tr>
+        <td> Number of times worn: </td>
+        <td>{{ selectedItem.timeWorn }}</td>
+      </tr> 
+      <tr>
+        <td> Cost per wear: </td>
+        <td>{{ selectedItem.costPerWear }}</td>
+      </tr>
+      <tr>
+        <td><button (click)="increaseWorn()"> I wear this today!</button></td>
+        <td><button (click)="remove()">Remove from wardrobe</button></td>
+      </tr>
+    </table>
+    
+    
+    
+
   </div>
+
+
+<ng-template #message>
+  <p> Please enter username</p>
+</ng-template>

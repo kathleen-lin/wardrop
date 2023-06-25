@@ -1,0 +1,18 @@
+.itemInfo{
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+}
+
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+  }
+
+mat-icon {
+    float: right;
+    color: #e7c0B4;
+
+}

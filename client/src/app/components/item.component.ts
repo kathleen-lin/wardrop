@@ -1,10 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ItemService } from '../item.service';
 import { Item } from '../model';
 import { MatDialog } from '@angular/material/dialog';
 import { RemovalComponent } from './removal.component';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-item',
@@ -20,9 +21,12 @@ export class ItemComponent implements OnInit {
 
   reason!: string
 
-  constructor(private httpClient: HttpClient, private activatedRoute: ActivatedRoute, private itmSvc: ItemService, private router: Router, private dialog: MatDialog) {}
+  user!: string|null
+
+  constructor(private httpClient: HttpClient, private activatedRoute: ActivatedRoute, private itmSvc: ItemService, private router: Router, private dialog: MatDialog, private location: Location) {}
 
   ngOnInit(): void {
+    this.user = localStorage.getItem("user");
     this.activatedRoute.params.subscribe(
       async (params)=> {
         this.itemId = params['itemId'];
@@ -36,6 +40,7 @@ export class ItemComponent implements OnInit {
     );
   }
 
+  
   increaseWorn() {
     this.selectedItem.timeWorn++
     // update the database
@@ -50,6 +55,10 @@ export class ItemComponent implements OnInit {
       data: {itemId: this.itemId, reason: this.reason}
     })
     
+  }
+
+  back() {
+    this.location.back();
   }
 
 

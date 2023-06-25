@@ -31,11 +31,12 @@
     flex-basis: 33.33%; 
     flex-grow: 0; 
     flex-shrink: 0; 
-    height: 300px; /* Adjust the height as needed */
+    min-height: 500px; 
+    padding: 10px;
   }
   
-  .individualItem img {
-    max-height: 200px;
+  img {
+    height: 200px;
   }
 
   p {

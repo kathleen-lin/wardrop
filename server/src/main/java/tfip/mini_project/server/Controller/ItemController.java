@@ -277,10 +277,10 @@ public class ItemController {
             return new ResponseEntity<String>(respOb.toString(), HttpStatus.OK);
         }
 
-            JsonObject respOb = Json.createObjectBuilder()
+        JsonObject respOb = Json.createObjectBuilder()
                                 .add("nextUrl", "drive/signin")
                                 .build();
-            return new ResponseEntity<String>(respOb.toString(), HttpStatus.OK);
+        return new ResponseEntity<String>(respOb.toString(), HttpStatus.OK);
     }
 
     @CrossOrigin(origins = "*")

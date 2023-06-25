@@ -49,7 +49,6 @@ public class itemRepo {
 
     private String DELETE_BY_ID_SQL = "DELETE from item where item_id = ?";
 
-    private String SQL_SORT = "select * from item where category = ? and user_name = ? order by ? ?";
 
     // create
     public void upload(String photoUrl, String description, Float price, Date purchaseOn,  int timeWorn, String category, String userName) throws SQLException, IOException{
@@ -199,9 +198,10 @@ public class itemRepo {
 
     public Optional<List<Item>> getSorted (String sortBy, String orderBy, String category, String user) {
         List<Item> sortedList = new LinkedList<Item>();
-
+        String query = "SELECT * FROM item WHERE category = ? AND user_name = ? ORDER BY " + sortBy + " " + orderBy;
         try {
-        final SqlRowSet rs = template.queryForRowSet( SQL_SORT , category, user, sortBy, orderBy);
+        final SqlRowSet rs = template.queryForRowSet(query , category, user);
+
 
             while (rs.next()) {
                 Item it = new Item();
