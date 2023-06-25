@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Item } from '../model';
 import { ItemService } from '../item.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-category',
@@ -20,7 +21,9 @@ export class CategoryComponent implements OnInit {
 
   isListEmpty: boolean = false
 
-  constructor(private httpClient: HttpClient, private activatedRoute: ActivatedRoute, private itmSvc: ItemService) {}
+  sortForm!: FormGroup
+
+  constructor(private httpClient: HttpClient, private activatedRoute: ActivatedRoute, private itmSvc: ItemService, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(
@@ -32,8 +35,12 @@ export class CategoryComponent implements OnInit {
         //     console.log(this.imageData);
         // });
         console.log(">>>" + this.categoryName);        
-      }
-    );
+      })
+      this.sortForm = this.fb.group(
+        {sortBy: this.fb.control<string>(''),
+          orderBy: this.fb.control<string>('')}
+      )
+    ;
     this.user = localStorage.getItem("user")
     if (this.user != null) {
 
@@ -60,6 +67,24 @@ export class CategoryComponent implements OnInit {
     this.itmSvc.increaseTimeWorn(item.itemId)
       .then((r) => console.log(r))
       .catch((err) => console.log(err))
+  }
+
+  getSorted(){
+    const sortBy = this.sortForm.get('sortBy')?.value
+    const orderBy = this.sortForm.get('orderBy')?.value
+    // @ts-ignore
+    this.itmSvc.getSortResult(sortBy, orderBy, this.categoryName, this.user)
+    .then((r) => {
+      // @ts-ignore
+      this.items = r
+      if (this.items.length == 0) {
+        this.isListEmpty = true
+        console.log("nothing in category")
+      }
+      console.log(this.items)
+    })
+    .catch((err) => console.log(err))
+  
   }
 
 }

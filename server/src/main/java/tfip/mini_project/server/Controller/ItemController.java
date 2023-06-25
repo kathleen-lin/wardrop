@@ -512,5 +512,42 @@ public class ItemController {
     }
 
 
+    // https://instinctive-celery-production.up.railway.app/api/sort?sortBy=time_worn&orderBy=desc&category=top&user=null 
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("sort")
+    public ResponseEntity<String> getTop3(@RequestParam("sortBy") String sortBy,@RequestParam("orderBy") String orderBy, @RequestParam("category") String category, @RequestParam("user") String user){
+
+        try {
+            Optional<List<Item>> optSortedItms = itemRepo.getSorted(sortBy, orderBy, category, user);
+
+            if (optSortedItms.isEmpty()){
+            
+                JsonArrayBuilder builder = Json.createArrayBuilder();
+                JsonArray jArray = builder.build();
+            
+                
+                return new ResponseEntity<String>(jArray.toString(), HttpStatus.OK);
+            }
+
+            
+            List<Item> itms = optSortedItms.get();
+
+            JsonArrayBuilder builder = Json.createArrayBuilder();
+            for(Item i: itms) {
+                builder.add(i.toJson());
+            }
+            JsonArray jArray = builder.build();
+
+            return new ResponseEntity<String>(jArray.toString(), HttpStatus.OK);
+
+        } catch (Exception e) {
+            System.out.println(e);
+            return new ResponseEntity<String>("something is wrong", HttpStatus.BAD_REQUEST);
+        }
+
+
+    }
+
     
 }

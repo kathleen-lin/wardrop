@@ -21,21 +21,29 @@
 }
 
 .item-container {
-    flex-wrap: wrap;
+    display: flex;
+    flex-flow: row wrap;
     justify-content: space-between;
   }
   
-  .row {
-    width: 100%;
-    justify-content: space-between;
-  }
-  
-  .col {
-    flex-basis: calc(33.33% - 20px);
-    margin-bottom: 20px;
-  }
   
   .individualItem {
+    flex-basis: 33.33%; 
+    flex-grow: 0; 
+    flex-shrink: 0; 
     height: 300px; /* Adjust the height as needed */
   }
   
+  .individualItem img {
+    max-height: 200px;
+  }
+
+  p {
+    text-align: center;
+    padding-top: 50px;
+  }
+
+  form {
+    padding-right: 10px;
+  }
+

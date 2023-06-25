@@ -49,6 +49,8 @@ public class itemRepo {
 
     private String DELETE_BY_ID_SQL = "DELETE from item where item_id = ?";
 
+    private String SQL_SORT = "select * from item where category = ? and user_name = ? order by ? ?";
+
     // create
     public void upload(String photoUrl, String description, Float price, Date purchaseOn,  int timeWorn, String category, String userName) throws SQLException, IOException{
         // try(Connection con = dataSource.getConnection(); 
@@ -192,6 +194,41 @@ public class itemRepo {
 
     public int insertUser (String user) {
         return template.update("insert into user (user_name) value (?)", user);
+
+    }
+
+    public Optional<List<Item>> getSorted (String sortBy, String orderBy, String category, String user) {
+        List<Item> sortedList = new LinkedList<Item>();
+
+        try {
+        final SqlRowSet rs = template.queryForRowSet( SQL_SORT , category, user, sortBy, orderBy);
+
+            while (rs.next()) {
+                Item it = new Item();
+                it.setItemId(rs.getInt("item_id"));
+                it.setPhotoUrl(rs.getString("photo_url"));
+                it.setDescription(rs.getString("description"));
+                it.setPrice(rs.getFloat("price"));
+                it.setDatePurchased(rs.getDate("date_purchased"));
+                it.setTimeWorn(rs.getInt("time_worn"));
+                it.setCostPerWear(rs.getFloat("cost_per_wear"));
+                it.setCategory(rs.getString("category"));
+
+                sortedList.add(it);
+            }
+
+            // System.out.println(topitems.size());
+
+            if (sortedList.size() == 0) {
+                return Optional.empty();
+                
+            }
+            return Optional.of(sortedList);
+        
+    } catch (Exception e) {
+        e.printStackTrace();
+        return Optional.empty();
+    }
 
     }
 

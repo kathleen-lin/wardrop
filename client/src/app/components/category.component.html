@@ -4,41 +4,62 @@
             <h3> {{ categoryName | titlecase }} </h3>
         </div>
         <div class ="child-float">
-            <mat-icon class="backIcon" [routerLink]="['/category']"> arrow_circle_left </mat-icon>
+          <mat-icon class="backIcon" [routerLink]="['/category']"> arrow_circle_left </mat-icon>
+          
+          <form action="get" [formGroup]="sortForm" (ngSubmit)="getSorted()">
+            <table>
+              <tr>
+                <td> sort by: </td>
+                <td>
+                  <select formControlName="sortBy" id="">
+                    <option value="time_worn">Times worn</option>
+                    <option value="cost_per_wear">Cost per wear</option>
+                  </select>
+                </td>
+                <td> in: </td>
+                <td><select formControlName="orderBy" id="">
+                  <option value="asc">Accending</option>
+                  <option value="desc">Descending</option>
+                </select></td>
+                <td> <button type="submit">Sort</button>
+                </td>
+              </tr>
+
+            </table>
+           
+          </form>
         </div>
     </div>
     
 </div>
 
+<br>
 <!-- to have a list of items in that category 
 example query - select * from items where category = top (categoryName)
 -->
 
   
-  <div *ngIf="user == null">
+  <div *ngIf="user == null" class="message">
     
     <p> please enter user name ...</p>
   </div>
 
   <div *ngIf="user != null"> 
+
     <div class="item-container">
-      <div class="row">
-        <div class="col" *ngFor="let i of items">
-          <div class="individualItem">
-            <mat-card [routerLink]="['/item', i.itemId]">
-              <img mat-card-image src="{{ i.photoUrl }}">
-              <h3>{{ i.description }}</h3>
-              <i>worn {{ i.timeWorn }} time(s)</i>
-            </mat-card>
-            <button (click)="increaseWorn(i)">I wore this today</button>
-          </div>
-        </div>
+      <div  *ngFor="let i of items" class ="individualItem">
+        <mat-card [routerLink]="['/item', i.itemId]">
+          <img mat-card-image src="{{ i.photoUrl }}">
+          <h3>{{ i.description }}</h3>
+          <i>worn {{ i.timeWorn }} time(s)</i>
+        </mat-card>
+        <button (click)="increaseWorn(i)">I wore this today</button>
       </div>
     </div>
 
   </div>
 
-  <div *ngIf="isListEmpty">
+  <div *ngIf="isListEmpty" class="message">
     <p>There is nothing in this category yet </p>
   </div>
 
