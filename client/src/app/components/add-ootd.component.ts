@@ -29,7 +29,7 @@ export class AddOOTDComponent {
     this.activatedRoute.params.subscribe(
       async (params) => {
         this.ootdFolerId = params['folderId']; 
-        console.log(this.ootdFolerId)
+        // console.log(this.ootdFolerId)
       })
 
   }
@@ -47,7 +47,7 @@ export class AddOOTDComponent {
     
     this.itmSvc.uploadOOTD(formdata)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         this.router.navigate(['/drive'])})
       .catch((err) => console.log(err));
     

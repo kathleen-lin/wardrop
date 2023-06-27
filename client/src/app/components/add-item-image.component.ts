@@ -41,7 +41,7 @@ export class AddItemImageComponent {
     
     this.itmSvc.uploadImage(formdata)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         this.router.navigate(['/analyse', fileName])})
       .catch((err) => console.log(err));
     

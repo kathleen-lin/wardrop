@@ -30,8 +30,8 @@ export class RemovalComponent implements OnInit {
   }
 
   processRemoval() {
-    console.log(this.data.itemId)
-    console.log(this.data.reason)
+    // console.log(this.data.itemId)
+    // console.log(this.data.reason)
     // do a delete mapping while passing in reason
     this.itmSvc.removeItem(this.data.itemId, this.data.reason)
     .then((result) => console.log(result))

@@ -19,7 +19,7 @@ export class LandingComponent implements OnInit {
 
   ngOnInit(): void {
       this.user = localStorage.getItem("user")
-      console.log("From localstorage: " + this.user)
+      // console.log("From localstorage: " + this.user)
       if (this.user != null) {
         // fetch query
         this.itmSvc.getTop3(this.user)
@@ -29,7 +29,7 @@ export class LandingComponent implements OnInit {
           if (this.topitems.length == 0){
             this.isListEmpty = true 
           }
-          console.log(this.topitems)
+          // console.log(this.topitems)
         })
         .catch((err) => console.log(err))
 

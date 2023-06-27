@@ -24,8 +24,8 @@ export class DriveComponent implements OnInit{
         const ootds = result as OOTDfiles;
         this.ootdImages = ootds.files;
         this.ootdFolderId = ootds.folderId;
-        console.log(this.ootdFolderId);
-        console.log(this.ootdImages);
+        // console.log(this.ootdFolderId);
+        // console.log(this.ootdImages);
         this.succesfullyLoaded = true;
 
       })

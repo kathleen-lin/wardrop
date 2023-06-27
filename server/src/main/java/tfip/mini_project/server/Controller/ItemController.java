@@ -270,6 +270,8 @@ public class ItemController {
             }
         }
 
+        System.out.println(isUserAuthenticated);
+
         if (isUserAuthenticated){
             JsonObject respOb = Json.createObjectBuilder()
                                 .add("nextUrl", "drive/home")

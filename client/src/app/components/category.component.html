@@ -53,7 +53,7 @@ example query - select * from items where category = top (categoryName)
           <h3>{{ i.description }}</h3>
           <i>worn {{ i.timeWorn }} time(s)</i>
         </mat-card>
-        <button (click)="increaseWorn(i)">I wore this today</button>
+        <button mat-flat-button color="accent" (click)="increaseWorn(i)">I wore this today</button>
       </div>
     </div>
 

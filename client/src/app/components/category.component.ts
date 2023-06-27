@@ -34,7 +34,7 @@ export class CategoryComponent implements OnInit {
         //     this.imageData = result.image;
         //     console.log(this.imageData);
         // });
-        console.log(">>>" + this.categoryName);        
+        // console.log(">>>" + this.categoryName);        
       })
       this.sortForm = this.fb.group(
         {sortBy: this.fb.control<string>(''),
@@ -79,9 +79,9 @@ export class CategoryComponent implements OnInit {
       this.items = r
       if (this.items.length == 0) {
         this.isListEmpty = true
-        console.log("nothing in category")
+        // console.log("nothing in category")
       }
-      console.log(this.items)
+      // console.log(this.items)
     })
     .catch((err) => console.log(err))
   

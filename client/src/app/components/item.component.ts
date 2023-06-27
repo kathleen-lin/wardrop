@@ -30,11 +30,12 @@ export class ItemComponent implements OnInit {
     this.activatedRoute.params.subscribe(
       async (params)=> {
         this.itemId = params['itemId'];
-        console.log(">>> itemId: " + this.itemId);   
+        // console.log(">>> itemId: " + this.itemId);   
         this.itmSvc.getItemById(this.itemId)
           .then((result) => {
                     this.selectedItem = result      
-                    console.log("RESULT:" + result)})
+                    // console.log("RESULT:" + result)
+                  })
           .catch((err) => console.log(err))
       }
     );

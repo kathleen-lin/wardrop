@@ -29,7 +29,7 @@ export class AddItemComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.photoUrl = this.photoSvc.getImageUrl(); 
-    console.log(this.photoUrl);
+    // console.log(this.photoUrl);
     // @ts-ignore
     this.user = localStorage.getItem("user")
     this.itmDescription = this.photoSvc.getItemDescription();
@@ -59,10 +59,10 @@ export class AddItemComponent implements OnInit, AfterViewInit {
       formdata.set('timeWorn', this.addForm.get('timeWorn')?.value)
       formdata.set('category', this.addForm.get('category')?.value)
       formdata.set('userName', this.user)
-      console.log(formdata.get('userName'))
+      // console.log(formdata.get('userName'))
       this.itmSvc.postItem(formdata)
                   .then((result) => {
-                      console.log(result);
+                      // console.log(result);
                       this.router.navigate(['/category', this.addForm.get('category')?.value]);
                     })
                     .catch((err) => console.log(err))

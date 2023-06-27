@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
   saveUser(){
     localStorage.clear()
     this.user = this.userForm.get("userName")?.value
-    console.log(this.user)
+    // console.log(this.user)
     // how can i share this info with other components?
     localStorage.setItem("user", this.user)
     this.router.navigate(["/category"])
@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
   callGDrive() {
     this.itmSvc.Gdrive(this.user)
       .then((result) => {
-        console.log(result);
+        // console.log(result);
         const uri = result as nextUrl;
         this.nextUrl = uri.nextUrl;
         console.log(this.nextUrl);
@@ -46,6 +46,9 @@ export class AppComponent implements OnInit {
 
           const nextPage = "https://instinctive-celery-production.up.railway.app/api/" + this.nextUrl + "?user=" + this.user;
         
+
+          // TODO: work on this, it seems to not match server controller
+          // https://instinctive-celery-production.up.railway.app/api/drive/signin?user=kath
           this.itmSvc.getAuthUrl(nextPage)
             .then((url) => {
               const authUrl = url as redirectUrl;

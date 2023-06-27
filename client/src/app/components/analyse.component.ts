@@ -20,7 +20,7 @@ export class AnalyseComponent implements OnInit{
       this.activatedRoute.params.subscribe(
         async (params) => {
           this.fileName = params['filename']; 
-          console.log(this.fileName)
+          // console.log(this.fileName)
           this.itmSvc.analyseImage(this.fileName)
             .then((result) => { 
               const analysisResult = result as analysisResult;

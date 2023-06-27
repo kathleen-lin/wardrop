@@ -23,7 +23,7 @@ public class GoogleDriveAuthService {
 
     private static HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-    private static final List<String> SCOPES = Collections.singletonList(DriveScopes.DRIVE_FILE);
+    private static final List<String> SCOPES = Collections.singletonList(DriveScopes.DRIVE);
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
     private GoogleAuthorizationCodeFlow flow;
 
