@@ -1,6 +1,6 @@
 <div>
     <h2>OOTD Images</h2>
-    
+
     <div *ngIf="succesfullyLoaded">
       <button (click) = "navigateToUploadOOTD()">
         add new ootd
@@ -8,29 +8,29 @@
     </div>
 
     <div class="toggle-icons">
-      <span (click)="toggleView('carousel')" [class.active]="viewMode === 'carousel'">
-        <i class="fas fa-images"></i> Carousel View
-      </span>
-      <span (click)="toggleView('grid')" [class.active]="viewMode === 'grid'">
-        <i class="fas fa-th"></i> Grid View
-      </span>
+        <mat-icon (click)="toggleView('carousel')" [class.active]="viewMode === 'carousel'">view_carousel</mat-icon>
+        <mat-icon (click)="toggleView('grid')" [class.active]="viewMode === 'grid'">view_quilt</mat-icon>
+
+      
     </div>
     
     <div *ngIf="viewMode === 'carousel'">
-      <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+      <div id="ootdCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
-          <div class="carousel-item" *ngFor="let imageId of ootdImages; let i = index" [class.active]="i === 0">
-            <img [src]="getDriveImageURL(imageId)" class="d-block w-100" alt="OOTD Image">
-          </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
+        <div class="carousel-item" *ngFor="let imageId of ootdImages; let i = index" [class.active]="i === 0">
+        <img [src]="getDriveImageURL(imageId)" class="d-block w-100" alt="OOTD Image">
+      </div>
+    </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
       </div>
       
     </div>
@@ -52,7 +52,6 @@
 
     
       
-  </div>
   
 
 
