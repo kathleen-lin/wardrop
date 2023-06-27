@@ -45,12 +45,12 @@ example query - select * from items where category = top (categoryName)
   </div>
 
   <div *ngIf="user != null"> 
-
-    <div class="item-container">
+    <div class="item-container" >
+      <div matBadge="i.photoUrl" matBadgeColor="accent"> </div>
       <div  *ngFor="let i of items" class ="individualItem">
-        <mat-card [routerLink]="['/item', i.itemId]">
+        <mat-card [routerLink]="['/item', i.itemId]" >
           <img mat-card-image src="{{ i.photoUrl }}">
-          <h3>{{ i.description }}</h3>
+          <h3 >{{ i.description }}</h3>
           <i>worn {{ i.timeWorn }} time(s)</i>
         </mat-card>
         <button mat-flat-button color="accent" (click)="increaseWorn(i)">I wore this today</button>

@@ -63,11 +63,7 @@ export class AppComponent implements OnInit {
               if (popup) {
                 popup.addEventListener("load", () => {
                   popup.close();
-              
-                  // Delay navigation by 1 second (adjust the delay as needed)
-                  setTimeout(() => {
-                    this.router.navigate(["/drive"]);
-                  }, 1000);
+                  this.router.navigate(["/drive"]);
                 });
               }
               
