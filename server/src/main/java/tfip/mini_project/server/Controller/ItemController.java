@@ -353,7 +353,7 @@ public class ItemController {
                 .build();
 
         // folderId to be returned
-        String folderId = createFolderIfNotExists("OOTD", user);
+        String folderId = createFolderIfNotExists("Wardrop-OOTD", user);
 
        // search files in the folder
         String query = "'" + folderId + "' in parents";
