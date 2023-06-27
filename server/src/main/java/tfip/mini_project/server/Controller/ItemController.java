@@ -270,7 +270,7 @@ public class ItemController {
             }
         }
 
-        System.out.println(isUserAuthenticated);
+        System.out.println(this.gDriveUser + " is authenicated: " + isUserAuthenticated);
 
         if (isUserAuthenticated){
             JsonObject respOb = Json.createObjectBuilder()
@@ -303,7 +303,9 @@ public class ItemController {
     @CrossOrigin(origins = "*")
     @GetMapping("/oauth")
     public ResponseEntity<String> saveAuthCode(@RequestParam("code") String code) throws IOException {
-        System.out.println(code);
+        System.out.println("code:" + code);
+        System.out.println("user: " + this.gDriveUser );
+
         if (code != null){
             saveToken(code, this.gDriveUser);
             JsonObject respOb = Json.createObjectBuilder()

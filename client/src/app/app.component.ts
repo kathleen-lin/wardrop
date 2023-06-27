@@ -42,7 +42,9 @@ export class AppComponent implements OnInit {
         this.nextUrl = uri.nextUrl;
         console.log(this.nextUrl);
   
-        if (this.nextUrl == "drive/signin"){
+        if (this.nextUrl === "drive/signin"){
+
+          console.log("need to sign in")
 
           const nextPage = "https://instinctive-celery-production.up.railway.app/api/" + this.nextUrl + "?user=" + this.user;
         
@@ -53,7 +55,7 @@ export class AppComponent implements OnInit {
             .then((url) => {
               const authUrl = url as redirectUrl;
               this.authUrl = authUrl.redirectUrl;
-              console.log(this.authUrl);
+              console.log("auth url:" + this.authUrl);
               const popup = window.open(this.authUrl, "_blank", "width=500,height=600");
   
               if (popup){

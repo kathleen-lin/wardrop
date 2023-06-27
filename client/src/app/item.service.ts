@@ -84,6 +84,7 @@ export class ItemService {
   }
 
   getAuthUrl(url: string) {
+    // GET https://instinctive-celery-production.up.railway.app/api/drive/signin?user=kath
     return firstValueFrom(this.httpClient.get(url))
   }
 
