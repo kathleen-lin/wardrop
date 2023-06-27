@@ -1,7 +1,7 @@
 <div>
     <h2>OOTD Images</h2>
     <div class="image-container">
-      <div *ngFor="let imageId of ootdImages">
+      <div *ngFor="let imageId of ootdImages" class ="individualOOTD">
         <img [src]="getDriveImageURL(imageId)" alt="OOTD Image" width="200px">
       </div>
     </div>
@@ -13,4 +13,7 @@
     </div>
       
   </div>
+  
+
+
   
