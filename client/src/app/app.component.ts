@@ -51,6 +51,8 @@ export class AppComponent implements OnInit {
 
           // TODO: work on this, it seems to not match server controller
           // https://instinctive-celery-production.up.railway.app/api/drive/signin?user=kath
+          console.log("nextPage:" + nextPage);
+          
           this.itmSvc.getAuthUrl(nextPage)
             .then((url) => {
               const authUrl = url as redirectUrl;
@@ -58,14 +60,18 @@ export class AppComponent implements OnInit {
               console.log("auth url:" + this.authUrl);
               const popup = window.open(this.authUrl, "_blank", "width=500,height=600");
   
-              if (popup){
-              popup.addEventListener("load", () => {
+              if (popup) {
+                popup.addEventListener("load", () => {
                   popup.close();
-            
+              
+                  // Delay navigation by 1 second (adjust the delay as needed)
+                  setTimeout(() => {
+                    this.router.navigate(["/drive"]);
+                  }, 1000);
                 });
               }
+              
 
-              this.router.navigate(["/drive"]);
             
               })
             .catch((err) => console.log(err));

@@ -263,14 +263,16 @@ public class ItemController {
         GoogleAuthorizationCodeFlow flow = authSvc.getFlow();
         Credential cred = flow.loadCredential(user);
 
+
         if (cred!=null) {
             boolean tokenValid = cred.refreshToken();
             if (tokenValid){
                 isUserAuthenticated = true;
             }
         }
-
-        System.out.println(this.gDriveUser + " is authenicated: " + isUserAuthenticated);
+        System.out.println("User: " + this.gDriveUser);
+        System.out.println("Credential: " + cred);
+        System.out.println("Is User Authenticated: " + isUserAuthenticated);
 
         if (isUserAuthenticated){
             JsonObject respOb = Json.createObjectBuilder()
@@ -295,6 +297,8 @@ public class ItemController {
             JsonObject respOb = Json.createObjectBuilder()
                                 .add("redirectUrl", redirectUrl)
                                 .build();
+        System.out.println("Redirect URL: " + redirectUrl);
+
 
         return new ResponseEntity<String>(respOb.toString(), HttpStatus.OK);
 
@@ -323,7 +327,12 @@ public class ItemController {
     private void saveToken(String code, String user) throws IOException{
         GoogleTokenResponse response = authSvc.getFlow().newTokenRequest(code).setRedirectUri("https://instinctive-celery-production.up.railway.app/api/oauth").execute();
         
-        authSvc.getFlow().createAndStoreCredential(response, user);        
+        Credential cred = authSvc.getFlow().createAndStoreCredential(response, user);     
+        
+        System.out.println("Credential from drive/signin: " + cred);
+
+        System.out.println("Token Saved for User: " + user);
+
 
     }
     
@@ -335,6 +344,7 @@ public class ItemController {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
         Credential credential = authSvc.getFlow().loadCredential(user);
+        System.out.println("Credential from drive/home: " + credential );
         JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
 
 
