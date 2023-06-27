@@ -15,6 +15,7 @@ export class DriveComponent implements OnInit{
   ootdFolderId!: string
   succesfullyLoaded: boolean = false;
   constructor (private itmSvc: ItemService, private router: Router) {}
+  viewMode: 'carousel' | 'grid' = 'carousel'; 
   
   ngOnInit(): void {
     // @ts-ignore
@@ -40,4 +41,9 @@ export class DriveComponent implements OnInit{
     this.router.navigate(['/drive/add', this.ootdFolderId])
   }
   
+
+  toggleView(mode: 'carousel' | 'grid'): void {
+    this.viewMode = mode;
+  }
+
 }
