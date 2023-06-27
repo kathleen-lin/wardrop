@@ -63,10 +63,10 @@ export class AppComponent implements OnInit {
               if (popup) {
                 popup.addEventListener("load", () => {
                   popup.close();
-                  this.router.navigate(["/drive"]);
                 });
               }
               
+              this.router.navigate(["/drive"]);
 
             
               })
